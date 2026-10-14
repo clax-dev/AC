@@ -5,3 +5,10 @@ out/
 
 # copia local de seguridad (no se sube)
 _backup_original/
+
+# ficheros que generan las demos del tema 4
+ficheros_demo/
+
+# tareas semanales (Maven): compilados y salidas generadas al ejecutar
+target/
+ejercicios/tareas_semanales/*/salida/

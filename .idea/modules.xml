@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AC.iml" filepath="$PROJECT_DIR$/AC.iml" />
       <module fileurl="file://$PROJECT_DIR$/ejercicios/ejercicios.iml" filepath="$PROJECT_DIR$/ejercicios/ejercicios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ejercicios/tareas_semanales/T01_BioDAM/T01_BioDAM.iml" filepath="$PROJECT_DIR$/ejercicios/tareas_semanales/T01_BioDAM/T01_BioDAM.iml" />
       <module fileurl="file://$PROJECT_DIR$/teoria/teoria.iml" filepath="$PROJECT_DIR$/teoria/teoria.iml" />
     </modules>
   </component>

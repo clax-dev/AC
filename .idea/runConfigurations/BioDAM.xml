@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BioDAM" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="biodam.BioDAM" />
+    <module name="T01_BioDAM" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ejercicios/tareas_semanales/T01_BioDAM" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
