@@ -50,7 +50,7 @@ public class BioDAM {
 
         /* Pruebas del bloque 2
         // ataque path traversal → WARN + SecurityException
-        validatePath("datos/essd/ppp", Paths.get("datos"));
+        validatePath("datos/../essd/ppp", Paths.get("datos"));
         // fichero que no existe → ERROR + cierra el programa
         validatePath("datos/no_existe.csv", Paths.get("datos"));
         */
