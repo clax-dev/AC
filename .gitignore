@@ -12,3 +12,6 @@ ficheros_demo/
 # tareas semanales (Maven): compilados y salidas generadas al ejecutar
 target/
 ejercicios/tareas_semanales/*/salida/
+
+# ZIPs de entrega (se generan aparte)
+*.zip
