@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tema 6 · JDBC y JPA</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 9mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 6mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 6mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 12.5pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .chip { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3mm 4mm; font-size: 11pt; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 12.5pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 12.5pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 10pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+
+  .code-ok { color:#16a34a; font-weight:700 } .code-mal { color:#dc2626; font-weight:700 }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 10pt; }
+  .small { font-size: 10pt; }
+</style>
+</head>
+<body>
+<section class="page">
+  <span class="chip">TEMA 6 · MAPA</span>
+  <h1>JDBC y JPA/Hibernate</h1>
+  <h2>Hasta ahora guardábamos en ficheros. Ahora hablamos con una base de datos: con SQL a mano (JDBC) o con objetos (JPA).</h2>
+  <svg viewBox="0 0 1000 230">
+    <defs><marker id="d1" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="10" y="20" width="180" height="80" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="100" y="55" text-anchor="middle" font-size="16" font-weight="700">☕ Tu programa</text><text x="100" y="80" text-anchor="middle" font-size="13">objetos Java</text>
+    <rect x="260" y="130" width="190" height="80" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="355" y="165" text-anchor="middle" font-size="16" font-weight="700">🧩 JPA / Hibernate</text><text x="355" y="190" text-anchor="middle" font-size="13">objetos → SQL solo</text>
+    <rect x="520" y="20" width="190" height="80" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="615" y="55" text-anchor="middle" font-size="16" font-weight="700">🔌 JDBC + driver</text><text x="615" y="80" text-anchor="middle" font-size="13">manda el SQL</text>
+    <rect x="790" y="20" width="200" height="80" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="890" y="55" text-anchor="middle" font-size="16" font-weight="700">🗄️ Base de datos</text><text x="890" y="80" text-anchor="middle" font-size="13">MySQL, H2, PostgreSQL…</text>
+    <path d="M192 60 L514 60" stroke="#334155" stroke-width="3" marker-end="url(#d1)"/><text x="350" y="50" text-anchor="middle" font-size="13">SQL escrito por ti</text>
+    <path d="M150 102 L255 160" stroke="#334155" stroke-width="3" marker-end="url(#d1)"/>
+    <path d="M452 160 L560 104" stroke="#334155" stroke-width="3" marker-end="url(#d1)"/>
+    <path d="M712 60 L784 60" stroke="#334155" stroke-width="3" marker-end="url(#d1)"/>
+  </svg>
+  <div class="grid4">
+    <div class="card azul"><b class="t">JDBC</b>«Tú escribes el SQL; Java lo manda y te trae las filas.»<br><small>pág. 2-3</small></div>
+    <div class="card amar"><b class="t">Driver</b>«El traductor de cada base de datos: una librería externa.»<br><small>pág. 2</small></div>
+    <div class="card verde"><b class="t">JPA</b>«Las reglas (interfaz) para guardar objetos sin escribir SQL.»<br><small>pág. 4</small></div>
+    <div class="card nar"><b class="t">Hibernate</b>«Quien cumple esas reglas: la implementación de JPA.»<br><small>pág. 4</small></div>
+  </div>
+  <div class="frase">JPA <b>no sustituye</b> a JDBC: Hibernate <b>usa JDBC por debajo</b>. Lo que cambia es quién escribe el SQL.</div>
+  <span class="tag">AC · DAM 2º · Tema 6: JDBC y JPA</span><span class="num">1</span>
+</section>
+
+<section class="page">
+  <span class="chip">1 · JDBC</span>
+  <h1>Conectar, preguntar, recorrer</h1>
+  <div class="grid3">
+    <div class="card azul"><span class="ico">🔌</span><b class="t">Connection</b>La llamada abierta con la base de datos.<br><span class="mono">DriverManager.getConnection(url, user, pass)</span></div>
+    <div class="card amar"><span class="ico">📝</span><b class="t">PreparedStatement</b>La pregunta en SQL, con huecos <span class="mono">?</span><br><span class="mono">con.prepareStatement(sql)</span></div>
+    <div class="card verde"><span class="ico">📋</span><b class="t">ResultSet</b>Las filas de respuesta: se leen una a una con <span class="mono">next()</span></div>
+  </div>
+  <div class="grid2" style="margin-top:3mm">
+    <pre><span class="k">try</span> (Connection con = DriverManager.getConnection(URL, USER, PASS);
+     PreparedStatement ps = con.prepareStatement(
+         <span class="g">"SELECT id, nombre FROM producto WHERE precio &gt; ?"</span>)) {
+    ps.setDouble(1, 10.0);              <span class="c">// ⚠ el primer ? es el 1</span>
+    <span class="k">try</span> (ResultSet rs = ps.executeQuery()) {
+        <span class="k">while</span> (rs.next()) {               <span class="c">// avanza a la siguiente fila</span>
+            <span class="k">int</span> id = rs.getInt(<span class="g">"id"</span>);
+            String n = rs.getString(<span class="g">"nombre"</span>);
+        }
+    }
+}   <span class="c">// se cierra todo solo (tema 4: lo que se abre, se cierra)</span></pre>
+    <table class="small">
+      <tr><th>Método</th><th>Para</th><th>Devuelve</th></tr>
+      <tr><td class="mono">executeQuery()</td><td>SELECT</td><td>ResultSet</td></tr>
+      <tr><td class="mono">executeUpdate()</td><td>INSERT · UPDATE · DELETE</td><td>int (filas afectadas)</td></tr>
+      <tr><td class="mono">execute()</td><td>cualquiera</td><td>boolean</td></tr>
+      <tr><th colspan="3">URL de conexión</th></tr>
+      <tr><td colspan="3" class="mono">jdbc:mysql://localhost:3306/tienda</td></tr>
+      <tr><td colspan="3"><span class="mono">jdbc</span>:<span class="mono">tipo de BD</span>://<span class="mono">servidor</span>:<span class="mono">puerto</span>/<span class="mono">base de datos</span></td></tr>
+    </table>
+  </div>
+  <div class="frase">«Los índices de JDBC empiezan en <b>1</b>, no en 0. Y el <span class="mono">ResultSet</span> empieza <b>antes</b> de la primera fila: sin <span class="mono">next()</span> no hay nada que leer.»</div>
+  <span class="num">2</span>
+</section>
+
+<section class="page">
+  <span class="chip">2 · SEGURIDAD Y TRANSACCIONES</span>
+  <h1>Huecos, no pegamento · Todo o nada</h1>
+  <div class="grid2">
+    <div>
+      <div class="card mal"><b class="t">💉 Inyección SQL: concatenar</b>Si el usuario escribe <span class="mono">' OR '1'='1</span>, entra sin contraseña.</div>
+      <pre style="margin-top:3mm"><span class="c">// ❌ el texto del usuario pasa a ser SQL</span>
+String sql = <span class="g">"SELECT * FROM usuario WHERE nombre = '"</span>
+        + nombre + <span class="g">"'"</span>;
+Statement st = con.createStatement();
+st.executeQuery(sql);</pre>
+      <div class="card verde" style="margin-top:3mm"><b class="t">✅ PreparedStatement</b>El valor va en un hueco <span class="mono">?</span> y se trata siempre como <b>dato</b>, nunca como SQL.</div>
+      <pre style="margin-top:3mm">PreparedStatement ps = con.prepareStatement(
+    <span class="g">"SELECT * FROM usuario WHERE nombre = ?"</span>);
+ps.setString(1, nombre);</pre>
+    </div>
+    <div>
+      <div class="card azul"><b class="t">🏦 Transacción: todo o nada</b>Una transferencia son dos UPDATE: restar en una cuenta y sumar en otra. Si falla el segundo, el primero <b>se deshace</b>.</div>
+      <pre style="margin-top:3mm">con.setAutoCommit(<span class="k">false</span>);    <span class="c">// empiezo la transacción</span>
+<span class="k">try</span> {
+    restar.executeUpdate();
+    sumar.executeUpdate();
+    con.commit();               <span class="c">// ✅ se guardan las dos</span>
+} <span class="k">catch</span> (SQLException e) {
+    con.rollback();             <span class="c">// ↩ no se guarda ninguna</span>
+}</pre>
+      <table class="small" style="margin-top:3mm">
+        <tr><th>Por defecto</th><td><b>autocommit</b>: cada sentencia se guarda sola</td></tr>
+        <tr><th>Excepción</th><td><span class="mono">SQLException</span> (checked, como <span class="mono">IOException</span>)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="frase">«Nunca pegues texto del usuario en el SQL: usa <span class="mono">?</span>.» · «Varias operaciones que van juntas, en una transacción: o todas o ninguna.»</div>
+  <span class="num">3</span>
+</section>
+
+<section class="page">
+  <span class="chip">3 · JPA / HIBERNATE</span>
+  <h1>La clase es la tabla</h1>
+  <div class="grid2">
+    <pre><span class="k">@Entity</span>                          <span class="c">// esta clase es una tabla</span>
+<span class="k">@Table</span>(name = <span class="g">"producto"</span>)
+<span class="k">public class</span> Producto {
+    <span class="k">@Id</span>                          <span class="c">// la clave primaria</span>
+    <span class="k">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="k">private</span> Long id;              <span class="c">// la pone la BD (autoincrement)</span>
+
+    <span class="k">@Column</span>(nullable = <span class="k">false</span>)
+    <span class="k">private</span> String nombre;
+    <span class="k">private double</span> precio;
+
+    <span class="k">public</span> Producto() { }         <span class="c">// ⚠ obligatorio (como en Jackson)</span>
+    <span class="c">// getters y setters</span>
+}</pre>
+    <div>
+      <table class="small">
+        <tr><th>Java</th><th>Base de datos</th></tr>
+        <tr><td>clase <span class="mono">@Entity</span></td><td>tabla</td></tr>
+        <tr><td>atributo</td><td>columna</td></tr>
+        <tr><td>un objeto</td><td>una fila</td></tr>
+        <tr><td><span class="mono">@Id</span></td><td>clave primaria</td></tr>
+      </table>
+      <div class="card verde" style="margin-top:3mm"><b class="t">EntityManager: el que habla con la BD</b>
+        <span class="mono">persist(p)</span> guarda (INSERT)<br>
+        <span class="mono">find(Producto.class, id)</span> busca por id (SELECT)<br>
+        <span class="mono">merge(p)</span> actualiza (UPDATE)<br>
+        <span class="mono">remove(p)</span> borra (DELETE)<br>
+        Los cambios van entre <span class="mono">getTransaction().begin()</span> y <span class="mono">commit()</span>.</div>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:3mm">
+    <div class="card amar"><b class="t">JPQL: consultas sobre clases</b>
+      <span class="mono">SELECT p FROM Producto p WHERE p.precio &gt; :min</span><br>
+      Se pregunta por la <b>clase</b> y sus <b>atributos</b>, no por la tabla. <span class="mono">:min</span> es un hueco con nombre.</div>
+    <div class="card azul"><b class="t">Configuración</b>
+      <span class="mono">persistence.xml</span> (en <span class="mono">resources/META-INF</span>): URL, usuario, contraseña y driver.<br>
+      Hibernate 6: anotaciones en <span class="mono">jakarta.persistence</span> (antes <span class="mono">javax</span>).</div>
+  </div>
+  <div class="frase">«Con JPA no escribes el SQL: anotas la clase y Hibernate traduce cada objeto en una fila.» Es la idea de Jackson (objeto ↔ JSON), pero objeto ↔ tabla.</div>
+  <span class="num">4</span>
+</section>
+
+<section class="page">
+  <span class="chip">4 · ¿CUÁL ELIJO?</span>
+  <h1>JDBC o JPA</h1>
+  <table>
+    <tr><th></th><th>JDBC</th><th>JPA / Hibernate</th></tr>
+    <tr><td>¿Quién escribe el SQL?</td><td>tú</td><td>Hibernate (tú escribes JPQL si hace falta)</td></tr>
+    <tr><td>Qué manejas</td><td>filas y columnas (<span class="mono">ResultSet</span>)</td><td>objetos (<span class="mono">Producto</span>)</td></tr>
+    <tr><td>Código</td><td class="code-mal">más largo: convertir cada fila a mano</td><td class="code-ok">mucho más corto</td></tr>
+    <tr><td>Control y rendimiento</td><td class="code-ok">total: ves cada consulta</td><td class="code-mal">menos: SQL generado (ojo con consultas de más)</td></tr>
+    <tr><td>Cambiar de base de datos</td><td class="code-mal">puede tocar el SQL</td><td class="code-ok">cambiar la configuración</td></tr>
+    <tr><td>Librerías</td><td>solo el driver</td><td>Hibernate + driver (proyecto Maven)</td></tr>
+  </table>
+  <div class="grid3" style="margin-top:4mm">
+    <div class="card azul"><b class="t">JDBC si…</b>consultas concretas, informes, pocos datos o quieres control total del SQL.</div>
+    <div class="card verde"><b class="t">JPA si…</b>una aplicación con muchas entidades y CRUD (crear, leer, actualizar, borrar).</div>
+    <div class="card amar"><b class="t">En la empresa</b>Spring Boot usa JPA/Hibernate por defecto (Spring Data JPA).</div>
+  </div>
+  <div class="frase">Las dos llegan al mismo sitio: JPA <b>escribe el SQL por ti</b> y por debajo lo manda con JDBC.</div>
+  <span class="num">5</span>
+</section>
+
+</body>
+</html>
