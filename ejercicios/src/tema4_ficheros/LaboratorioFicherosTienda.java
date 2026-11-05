@@ -118,7 +118,7 @@ public class LaboratorioFicherosTienda {
         Path rutaExcel = Paths.get("salida", "reporte_tienda.xlsx");
 
         // TODO: 4.1 Instanciar un libro XSSFWorkbook y crear una hoja llamada "Inventario"
-        try (XSSFWorkbook libro = new XSSFWorkbook()) {
+        //try (XSSFWorkbook libro = new XSSFWorkbook()) {
 
             // TODO: 4.2 Crear una fila de cabecera y aplicar un estilo básico (Negrita, color)
 
@@ -127,7 +127,7 @@ public class LaboratorioFicherosTienda {
             // TODO: 4.4 Insertar una celda de tipo fórmula que calcule el total (Precio * Unidades)
 
             // TODO: 4.5 Ajustar tamaño de columnas automáticamente y guardar con un OutputStream de NIO
-        }
+        //}
     }
 }
 
