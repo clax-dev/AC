@@ -1,0 +1,77 @@
+-- MySQL: ejecutar entero en MySQL Workbench (conexion localhost:3307, root)
+
+CREATE DATABASE IF NOT EXISTS basededatos;
+USE basededatos;
+
+CREATE TABLE cliente (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    codigo      VARCHAR(20) NOT NULL UNIQUE,
+    tipo        VARCHAR(10) NOT NULL
+        CHECK (tipo IN ('PERSONA', 'EMPRESA')),
+    fecha_alta  DATE NOT NULL,
+    activo      BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE persona (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id  BIGINT NOT NULL UNIQUE,
+    nombre      VARCHAR(80) NOT NULL,
+    apellidos   VARCHAR(120) NOT NULL,
+    dni         VARCHAR(15) NOT NULL UNIQUE,
+    email       VARCHAR(150) NOT NULL UNIQUE,
+    telefono    VARCHAR(25),
+
+    CONSTRAINT fk_persona_cliente
+        FOREIGN KEY (cliente_id)
+        REFERENCES cliente (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE empresa (
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id    BIGINT NOT NULL UNIQUE,
+    razon_social  VARCHAR(150) NOT NULL,
+    cif           VARCHAR(20) NOT NULL UNIQUE,
+    email         VARCHAR(150) NOT NULL UNIQUE,
+    telefono      VARCHAR(25),
+    sector        VARCHAR(80),
+
+    CONSTRAINT fk_empresa_cliente
+        FOREIGN KEY (cliente_id)
+        REFERENCES cliente (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE pedido (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fecha       DATE NOT NULL,
+    total       DECIMAL(10,2) NOT NULL,
+    cliente_id  BIGINT NOT NULL,
+
+    CONSTRAINT fk_pedido_cliente
+        FOREIGN KEY (cliente_id)
+        REFERENCES cliente (id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
+
+-- Datos de prueba
+INSERT INTO cliente (codigo, tipo, fecha_alta, activo) VALUES
+    ('CLI-001', 'PERSONA', '2025-11-10', TRUE),
+    ('CLI-002', 'EMPRESA', '2026-01-08', TRUE),
+    ('CLI-003', 'PERSONA', '2026-02-20', FALSE);
+
+INSERT INTO persona (cliente_id, nombre, apellidos, dni, email, telefono) VALUES
+    (1, 'Lucía', 'Martín Gómez', '12345678A', 'lucia@example.com', '611111111'),
+    (3, 'Andrés', 'Ruiz Pérez', '87654321B', 'andres@example.com', NULL);
+
+INSERT INTO empresa (cliente_id, razon_social, cif, email, telefono, sector) VALUES
+    (2, 'Talleres Norte S.L.', 'B12345678', 'info@talleresnorte.example', '910000000', 'Automoción');
+
+INSERT INTO pedido (fecha, total, cliente_id) VALUES
+    ('2026-01-15', 120.50, 1),
+    ('2026-02-10',  45.00, 1),
+    ('2026-02-18', 300.00, 2),
+    ('2026-03-02',  89.99, 3);
