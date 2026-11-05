@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>API REST visual</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 13mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 5mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 5mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 14pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 14pt; margin: 0 0 1.5mm; }
+  .chip { display: inline-block; align-self: flex-start; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3.5mm 4.5mm; font-size: 13pt; line-height: 1.4; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 15pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 14pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 12pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 13pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 12pt; }
+  .small, .card.small { font-size: 12pt; }
+  table.small td, table.small th { padding: 1.5mm 3mm; }
+  .mt { margin-top: 3mm; }
+</style>
+</head>
+<body>
+
+<section class="page">
+  <span class="chip">TEMA 7 · MAPA</span>
+  <h1>APIs REST con Spring Boot</h1>
+  <h2>En el tema 5 le pedías datos a la PokeAPI. Ahora tú eres la PokeAPI, y tu API funciona como un restaurante.</h2>
+  <svg viewBox="0 0 1000 205">
+    <defs><marker id="a1" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#334155"/></marker></defs>
+    <g text-anchor="middle">
+      <rect x="6" y="25" width="166" height="118" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+      <text x="89" y="62" font-size="27">🧑</text><text x="89" y="92" font-size="17" font-weight="700">Comensal</text><text x="89" y="118" font-size="13.5">cliente HTTP</text>
+      <rect x="213" y="25" width="166" height="118" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="296" y="62" font-size="27">🤵</text><text x="296" y="92" font-size="17" font-weight="700">Camarero</text><text x="296" y="118" font-size="13.5">Controller</text>
+      <rect x="420" y="25" width="166" height="118" rx="12" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+      <text x="503" y="62" font-size="27">👩‍🍳</text><text x="503" y="92" font-size="17" font-weight="700">Cocina</text><text x="503" y="118" font-size="13.5">Service</text>
+      <rect x="627" y="25" width="166" height="118" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+      <text x="710" y="62" font-size="27">📦</text><text x="710" y="92" font-size="17" font-weight="700">Encargado</text><text x="710" y="118" font-size="13.5">Repository + Hibernate</text>
+      <rect x="834" y="25" width="160" height="118" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+      <text x="914" y="62" font-size="27">🏬</text><text x="914" y="92" font-size="17" font-weight="700">Almacén</text><text x="914" y="118" font-size="13.5">PostgreSQL</text>
+    </g>
+    <g stroke="#334155" stroke-width="3">
+      <path d="M174 70 L206 70" marker-end="url(#a1)"/><path d="M381 70 L413 70" marker-end="url(#a1)"/>
+      <path d="M588 70 L620 70" marker-end="url(#a1)"/><path d="M795 70 L827 70" marker-end="url(#a1)"/>
+      <path d="M206 105 L179 105" marker-end="url(#a1)"/><path d="M413 105 L386 105" marker-end="url(#a1)"/>
+      <path d="M620 105 L593 105" marker-end="url(#a1)"/><path d="M827 105 L800 105" marker-end="url(#a1)"/>
+    </g>
+    <text x="500" y="180" text-anchor="middle" font-size="15"><tspan font-weight="700">La petición va a la derecha</tspan> · <tspan font-weight="700">La respuesta vuelve a la izquierda</tspan>, convertida en JSON</text>
+  </svg>
+  <div class="grid4 mt">
+    <div class="card azul"><b class="t">Capas</b>«Un solo trabajo por capa, y solo hablas con la de al lado.»<br><small>págs. 2-3</small></div>
+    <div class="card verde"><b class="t">Spring Boot</b>«El restaurante ya montado: servidor incluido.»<br><small>págs. 5-6</small></div>
+    <div class="card nar"><b class="t">DTO y Mapper</b>«La entidad es el ingrediente, el DTO es el plato.»<br><small>pág. 9</small></div>
+    <div class="card amar"><b class="t">Repository</b>«Interfaz vacía: Spring pone el trabajador.»<br><small>págs. 12 y 21</small></div>
+  </div>
+  <div class="frase">⚠️ <b>Dos «clientes»:</b> el <b>cliente HTTP</b> hace la petición (curl, Postman, React). La entidad <span class="mono">Cliente</span> es una fila de la base de datos.</div>
+  <span class="tag">AC · DAM 2º · Tema 7: APIs REST</span><span class="num">1</span>
+</section>
+
+<section class="page">
+  <span class="chip">2 · ARQUITECTURA POR CAPAS</span>
+  <h1>Cada capa, un solo trabajo</h1>
+  <div class="grid2" style="grid-template-columns: 1.35fr 1fr; align-items: stretch;">
+    <svg viewBox="0 0 620 390">
+      <defs><marker id="a2" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#dc2626"/></marker></defs>
+      <rect x="5" y="5" width="495" height="82" rx="11" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="20" y="38" font-size="23" font-weight="700">🤵 Presentación · Controller</text><text x="20" y="66" font-size="18">Punto de entrada: recibe y responde</text>
+      <rect x="5" y="102" width="495" height="82" rx="11" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+      <text x="20" y="135" font-size="23" font-weight="700">👩‍🍳 Lógica de negocio · Service</text><text x="20" y="163" font-size="18">Reglas, validaciones y transacciones</text>
+      <rect x="5" y="199" width="495" height="82" rx="11" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+      <text x="20" y="232" font-size="23" font-weight="700">📦 Persistencia · Repository</text><text x="20" y="260" font-size="18">Guarda y recupera información</text>
+      <rect x="5" y="296" width="495" height="82" rx="11" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+      <text x="20" y="329" font-size="23" font-weight="700">🏬 Base de datos · PostgreSQL</text><text x="20" y="357" font-size="18">Almacenamiento físico</text>
+      <path d="M540 25 L540 366" stroke="#dc2626" stroke-width="7" marker-end="url(#a2)"/>
+      <text x="578" y="195" font-size="15" font-weight="700" fill="#dc2626" text-anchor="middle" transform="rotate(90 578 195)" style="fill:#dc2626">siempre de una en una</text>
+    </svg>
+    <div style="display:flex; flex-direction:column; gap:3mm;">
+      <div class="card mal"><b class="t">🚫 Capas cerradas</b>El Controller <b>nunca</b> toca la base de datos directamente. El camarero no entra en el almacén.</div>
+      <div class="card ok"><b class="t">✅ Qué ganas</b>Puedes probar una capa sin las demás, y un cambio en una no rompe el resto.</div>
+      <div class="card"><b class="t">🤔 Sin capas</b>El camarero toma nota, cocina y va a por los tomates. Si cambia la receta, hay que tocarlo todo.</div>
+    </div>
+  </div>
+  <div class="frase">«Separación de responsabilidades»: dividir la aplicación en partes, cada una con un propósito único.</div>
+  <span class="num">2</span>
+</section>
+
+<section class="page">
+  <span class="chip">3 · PATRONES DE DISEÑO</span>
+  <h1>MVC, DAO y Repository</h1>
+  <div class="grid3">
+    <div class="card azul"><b class="t">MVC</b><b>C</b>ontroller recibe, <b>M</b>odel son los datos y la <b>V</b>ista presenta. En una API, la vista es el <b>JSON</b>.</div>
+    <div class="card amar"><b class="t">🗺️ DAO</b>«Pasillo 3, balda 2, caja de tomates.»<br>Conoces el camino exacto: SQL a mano.</div>
+    <div class="card verde"><b class="t">🛒 Repository</b>«Dame los tomates.»<br>Pides lo que quieres, como en una colección.</div>
+  </div>
+  <table class="mt">
+    <tr><th></th><th>DAO</th><th>Repository</th></tr>
+    <tr><td><b>Se centra en</b></td><td>La mecánica de la base de datos</td><td>Los objetos del dominio</td></tr>
+    <tr><td><b>Se parece a</b></td><td>Las tablas</td><td>Una colección en memoria</td></tr>
+    <tr><td><b>Tecnología</b></td><td>JDBC y SQL (tema 6)</td><td>JPA, Hibernate y Spring Data</td></tr>
+    <tr><td><b>Vocabulario</b></td><td class="mono">insert() · update() · delete()</td><td class="mono">save() · findAll() · findByNombre()</td></tr>
+    <tr><td><b>Esconde</b></td><td>Cómo se accede a los datos</td><td>Que exista una base de datos</td></tr>
+  </table>
+  <div class="frase">Los dos usan interfaces para desacoplar el código. Repository sube la abstracción: hablas de objetos, no de tablas.</div>
+  <span class="num">3</span>
+</section>
+
+<section class="page">
+  <span class="chip">4 · SPRING BOOT</span>
+  <h1>El food truck frente a la normativa</h1>
+  <div class="grid2">
+    <div class="card verde">
+      <span class="ico">🚚</span><b class="t">Spring Boot: el food truck</b>
+      La cocina viaja con el negocio: el <b>servidor va dentro</b> de tu aplicación.<br><br>
+      • Framework que decide por ti: <b>«todo incluido»</b><br>
+      • Genera un <span class="mono">.jar</span> que arranca solo<br>
+      • Comienzo más suave<br>
+      • Startups, microservicios, app de reparto
+    </div>
+    <div class="card azul">
+      <span class="ico">📜</span><b class="t">Jakarta EE: la normativa</b>
+      Dice cómo debe ser una cocina, pero <b>tú eliges el local</b> (WildFly, Payara, TomEE).<br><br>
+      • Estándar: <b>«define las reglas»</b><br>
+      • Genera un <span class="mono">.war</span> o <span class="mono">.ear</span> para un servidor externo<br>
+      • Más conceptual al principio<br>
+      • Banca, seguros, gobierno, sistemas de décadas
+    </div>
+  </div>
+  <div class="grid3 mt">
+    <div class="card amar"><b class="t">⚙️ Autoconfiguración</b>Evita el código repetido. Una API en minutos, no en un día.</div>
+    <div class="card amar"><b class="t">🍽️ Servidor embebido</b>Tomcat va dentro. No hay que instalar nada aparte.</div>
+    <div class="card amar"><b class="t">🧰 De fábrica</b>Actuator (salud), Spring Security y Spring Data.</div>
+  </div>
+  <span class="num">4</span>
+</section>
+
+<section class="page">
+  <span class="chip">5 · DTO Y MAPPER</span>
+  <h1>Nunca sirvas el ingrediente crudo</h1>
+  <svg viewBox="0 0 1000 205">
+    <defs><marker id="a3" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#334155"/></marker></defs>
+    <g text-anchor="middle">
+      <rect x="10" y="20" width="210" height="70" rx="11" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="115" y="50" font-size="16" font-weight="700">📝 Comanda</text><text x="115" y="74" font-size="13.5" class="mono">ClienteRequestDto</text>
+      <rect x="10" y="118" width="210" height="70" rx="11" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="115" y="148" font-size="16" font-weight="700">🍽️ Plato</text><text x="115" y="172" font-size="13.5" class="mono">ClienteResponseDto</text>
+      <rect x="395" y="50" width="210" height="110" rx="11" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="500" y="92" font-size="17" font-weight="700">👨‍🍳 Mapper</text><text x="500" y="120" font-size="14">quien emplata</text><text x="500" y="142" font-size="13">(lo usa el Service)</text>
+      <rect x="780" y="50" width="210" height="110" rx="11" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="885" y="92" font-size="17" font-weight="700">🥕 Ingrediente</text><text x="885" y="120" font-size="14" class="mono">Cliente @Entity</text><text x="885" y="142" font-size="13">se queda en la cocina</text>
+    </g>
+    <g stroke="#334155" stroke-width="3" fill="none">
+      <path d="M223 55 L388 85" marker-end="url(#a3)"/><path d="M388 130 L227 154" marker-end="url(#a3)"/>
+      <path d="M608 88 L773 88" marker-end="url(#a3)"/><path d="M773 124 L612 124" marker-end="url(#a3)"/>
+    </g>
+  </svg>
+  <div class="grid3 mt">
+    <div class="card"><b class="t">Entidad</b>Es igual a la tabla: la lleva <span class="mono">@Entity</span> y va unida a la base de datos.</div>
+    <div class="card"><b class="t">DTO</b>Clase sencilla, sin anotaciones de base de datos. Solo lo que entra o sale.</div>
+    <div class="card"><b class="t">Mapper</b>Convierte en los dos sentidos: DTO → entidad y entidad → DTO.</div>
+  </div>
+  <div class="frase">«El Controller recibe y devuelve DTOs, nunca entidades.» Así controlas qué campos salen en el JSON.</div>
+  <span class="num">5</span>
+</section>
+
+<section class="page">
+  <span class="chip">6 · ABRIR EL RESTAURANTE</span>
+  <h1>Montar el proyecto</h1>
+  <div class="grid2" style="grid-template-columns: 1.1fr 1fr; align-items: stretch;">
+    <div>
+      <h3>🛒 Dependencias (Spring Initializr)</h3>
+      <table class="small">
+        <tr><th>Dependencia</th><th>Para qué</th></tr>
+        <tr><td><b>Spring Web</b></td><td>Endpoints, servidor y Jackson</td></tr>
+        <tr><td><b>Spring Data JPA</b></td><td>Repositorios. Ya trae Hibernate</td></tr>
+        <tr><td><b>PostgreSQL Driver</b></td><td>El enchufe con la base de datos</td></tr>
+        <tr><td>Validation</td><td>Comprobar lo que llega (recomendable)</td></tr>
+        <tr><td>DevTools</td><td>Reinicia al cambiar código (opcional)</td></tr>
+        <tr><td>Lombok</td><td>No lo usamos: esconde código importante</td></tr>
+      </table>
+      <h3 class="mt">📓 ddl-auto: qué hace con las tablas</h3>
+      <table class="small">
+        <tr><td class="mono">validate</td><td>✅ Solo comprueba que coinciden</td></tr>
+        <tr><td class="mono">update</td><td>Intenta modificar la estructura</td></tr>
+        <tr><td class="mono">create</td><td>⚠️ Borra y crea al arrancar</td></tr>
+        <tr><td class="mono">create-drop</td><td>⚠️ Crea y borra al cerrar</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>📦 Paquetes</h3>
+      <pre>es.dam.clientesAPI
+├── ClientesApplication.java  <span class="c">← en la raíz</span>
+├── controller  <span class="c">endpoints HTTP</span>
+├── service     <span class="c">lógica y transacciones</span>
+├── repository  <span class="c">acceso a datos</span>
+├── entity      <span class="c">las tablas</span>
+├── dto         <span class="c">lo que entra y sale</span>
+└── mapper      <span class="c">entidad ↔ DTO</span></pre>
+      <h3 class="mt">🚪 @SpringBootApplication reúne tres</h3>
+      <div class="card small">
+        <span class="mono">@Configuration</span>: aquí puede haber configuración<br>
+        <span class="mono">@EnableAutoConfiguration</span>: prepara servidor, JPA, Jackson…<br>
+        <span class="mono">@ComponentScan</span>: busca a tu personal <b>de ese paquete hacia abajo</b>
+      </div>
+    </div>
+  </div>
+  <div class="frase">Si la clase principal no está en la raíz, Spring no encuentra tus controllers ni tus services.</div>
+  <span class="num">6</span>
+</section>
+
+<section class="page">
+  <span class="chip">7-8 · CONTROLLER Y REPOSITORY</span>
+  <h1>El verbo dice qué, la URL dice sobre qué</h1>
+  <div class="grid2">
+    <div>
+      <table class="small">
+        <tr><th>Verbo</th><th>Anotación</th><th>Acción</th><th>SQL</th></tr>
+        <tr><td><b>GET</b></td><td class="mono">@GetMapping</td><td>Consultar</td><td class="mono">SELECT</td></tr>
+        <tr><td><b>POST</b></td><td class="mono">@PostMapping</td><td>Crear</td><td class="mono">INSERT</td></tr>
+        <tr><td><b>PUT / PATCH</b></td><td class="mono">@PutMapping</td><td>Actualizar</td><td class="mono">UPDATE</td></tr>
+        <tr><td><b>DELETE</b></td><td class="mono">@DeleteMapping</td><td>Borrar</td><td class="mono">DELETE</td></tr>
+      </table>
+      <div class="card azul mt small"><b>@ResponseStatus</b> cambia el código de éxito: por ejemplo, <b>201 Created</b> en vez del 200 OK normal.</div>
+    </div>
+    <pre><span class="k">@RestController</span>             <span class="c">// devuelve datos</span>
+<span class="k">@RequestMapping</span>(<span class="g">"/api/clientes"</span>) <span class="c">// ruta base</span>
+<span class="k">public class</span> ClienteController {
+
+  <span class="k">@GetMapping</span>               <span class="c">// GET /api/clientes</span>
+  ... listarClientes() { ... }
+
+  <span class="k">@GetMapping</span>(<span class="g">"/{id}"</span>)       <span class="c">// GET /api/clientes/7</span>
+  ... buscar(<span class="k">@PathVariable</span> Long id) { ... }
+}</pre>
+  </div>
+  <h3 class="mt">🪄 El nombre del método es el pedido</h3>
+  <svg viewBox="0 0 1000 118">
+    <g text-anchor="middle">
+      <rect x="10" y="10" width="115" height="46" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="67" y="40" font-size="17" class="mono">findBy</text>
+      <rect x="130" y="10" width="165" height="46" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="212" y="40" font-size="17" class="mono">ActivoTrue</text>
+      <rect x="300" y="10" width="125" height="46" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="362" y="40" font-size="17" class="mono">OrderBy</text>
+      <rect x="430" y="10" width="105" height="46" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="482" y="40" font-size="17" class="mono">Codigo</text>
+      <rect x="540" y="10" width="75" height="46" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="577" y="40" font-size="17" class="mono">Asc</text>
+      <text x="67" y="84" font-size="14" class="mono">SELECT *</text><text x="212" y="84" font-size="14" class="mono">WHERE activo=true</text><text x="362" y="84" font-size="14" class="mono">ORDER BY</text><text x="482" y="84" font-size="14" class="mono">codigo</text><text x="577" y="84" font-size="14" class="mono">ASC</text>
+    </g>
+    <text x="640" y="30" font-size="15"><tspan font-weight="700">Sin escribir ni una línea más:</tspan></text>
+    <text x="640" y="56" font-size="14" class="mono">findAll() · findById() · save()</text>
+    <text x="640" y="80" font-size="14" class="mono">delete() · count() · existsById()</text>
+  </svg>
+  <span class="num">7</span>
+</section>
+
+<section class="page">
+  <span class="chip">9 · UN PEDIDO COMPLETO</span>
+  <h1>De la petición al JSON</h1>
+  <h2>Ejemplo: <span class="mono">POST</span> para crear un cliente (pág. 9)</h2>
+  <svg viewBox="0 0 1000 440">
+    <defs><marker id="a4" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#2563eb"/></marker><marker id="a5" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#059669"/></marker></defs>
+    <g text-anchor="middle" font-size="15.5" font-weight="700">
+      <rect x="6" y="6" width="150" height="50" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="81" y="37">🧑 Cliente HTTP</text>
+      <rect x="216" y="6" width="150" height="50" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="291" y="37">Controller</text>
+      <rect x="426" y="6" width="150" height="50" rx="9" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="501" y="37">Service + Mapper</text>
+      <rect x="636" y="6" width="150" height="50" rx="9" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="711" y="37">Repository</text>
+      <rect x="846" y="6" width="148" height="50" rx="9" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="920" y="37">PostgreSQL</text>
+    </g>
+    <g stroke="#cbd5e1" stroke-width="2" stroke-dasharray="6 6"><path d="M81 58 L81 432"/><path d="M291 58 L291 432"/><path d="M501 58 L501 432"/><path d="M711 58 L711 432"/><path d="M920 58 L920 432"/></g>
+    <g stroke-width="3" fill="none" stroke="#2563eb">
+      <path d="M85 102 L284 102" marker-end="url(#a4)"/><path d="M295 148 L494 148" marker-end="url(#a4)"/>
+      <path d="M505 194 L704 194" marker-end="url(#a4)"/><path d="M715 240 L913 240" marker-end="url(#a4)"/>
+    </g>
+    <g stroke-width="3" fill="none" stroke="#059669">
+      <path d="M916 286 L718 286" marker-end="url(#a5)"/><path d="M707 332 L508 332" marker-end="url(#a5)"/>
+      <path d="M497 378 L298 378" marker-end="url(#a5)"/><path d="M287 424 L88 424" marker-end="url(#a5)"/>
+    </g>
+    <g font-size="16.5" text-anchor="middle">
+      <text x="186" y="90" style="paint-order:stroke" stroke="#fff" stroke-width="5">1 · RequestDto (JSON)</text>
+      <text x="396" y="136" style="paint-order:stroke" stroke="#fff" stroke-width="5">2 · lo pasa al Service</text>
+      <text x="606" y="182" style="paint-order:stroke" stroke="#fff" stroke-width="5">3 · DTO → entidad y save()</text>
+      <text x="816" y="228" style="paint-order:stroke" stroke="#fff" stroke-width="5">4 · Hibernate: INSERT</text>
+      <text x="816" y="274" style="paint-order:stroke" stroke="#fff" stroke-width="5">5 · fila guardada</text>
+      <text x="606" y="320" style="paint-order:stroke" stroke="#fff" stroke-width="5">6 · entidad guardada</text>
+      <text x="396" y="366" style="paint-order:stroke" stroke="#fff" stroke-width="5">7 · entidad → ResponseDto</text>
+      <text x="186" y="412" style="paint-order:stroke" stroke="#fff" stroke-width="5">8 · Jackson: JSON</text>
+    </g>
+  </svg>
+  <div class="frase"><b>Ojo con la pág. 22:</b> ahí el Controller llama directamente al Repository. Es un atajo para probar el primer endpoint, no el diseño final.</div>
+  <span class="num">8</span>
+</section>
+
+<section class="page">
+  <span class="chip">10 · EL PRIMER ERROR</span>
+  <h1>Jackson llega tarde: el error LAZY</h1>
+  <svg viewBox="0 0 1000 150">
+    <defs><marker id="a6" viewBox="0 0 9 9" markerWidth="4" markerHeight="4" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#334155"/></marker></defs>
+    <g text-anchor="middle">
+      <rect x="6" y="15" width="220" height="112" rx="11" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="116" y="50" font-size="16" font-weight="700">1 · Trae el cliente</text><text x="116" y="78" font-size="13.5">pero no sus pedidos:</text><text x="116" y="100" font-size="13.5" class="mono">fetch = LAZY</text>
+      <rect x="260" y="15" width="220" height="112" rx="11" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="370" y="50" font-size="16" font-weight="700">2 · Cierra la sesión</text><text x="370" y="78" font-size="13.5">el almacén baja</text><text x="370" y="100" font-size="13.5">la persiana 🔒</text>
+      <rect x="514" y="15" width="220" height="112" rx="11" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="624" y="50" font-size="16" font-weight="700">3 · Jackson escribe</text><text x="624" y="78" font-size="13.5">recorre el cliente y</text><text x="624" y="100" font-size="13.5">pide <tspan class="mono">pedidos</tspan></text>
+      <rect x="768" y="15" width="226" height="112" rx="11" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="881" y="50" font-size="16" font-weight="700">4 · 💥 Error</text><text x="881" y="78" font-size="13.5">no se puede consultar</text><text x="881" y="100" font-size="13.5">sin sesión abierta</text>
+    </g>
+    <g stroke="#334155" stroke-width="3"><path d="M228 71 L253 71" marker-end="url(#a6)"/><path d="M482 71 L507 71" marker-end="url(#a6)"/><path d="M736 71 L761 71" marker-end="url(#a6)"/></g>
+  </svg>
+  <div class="grid2 mt">
+    <div class="card">
+      <b class="t">Opción 1: EAGER</b>
+      Traer siempre los pedidos con el cliente.<br>
+      • Consultas de más, aunque no hagan falta<br>
+      • Necesita <span class="mono">@JsonIgnore</span> en <span class="mono">Pedido.cliente</span> para evitar el bucle infinito: cliente → pedidos → cliente → …
+    </div>
+    <div class="card ok">
+      <b class="t">✅ Opción 2: DTO</b>
+      El Repository devuelve entidades y el Service las convierte en DTO.<br>
+      • Algo más de código<br>
+      • Controlas qué campos salen en el JSON<br>
+      • Respeta las capas
+    </div>
+  </div>
+  <div class="frase">«LAZY trae los pedidos cuando los pides, pero si el almacén ya ha cerrado, no hay quien los traiga.»</div>
+  <span class="num">9</span>
+</section>
+
+</body>
+</html>
