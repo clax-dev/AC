@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Streams visual</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 9mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 6mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 6mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 12.5pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .chip { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3mm 4mm; font-size: 11pt; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 12.5pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 12.5pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 10pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+
+  .code-ok { color:#16a34a; font-weight:700 } .code-mal { color:#dc2626; font-weight:700 }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 10pt; }
+  .small { font-size: 10pt; }
+</style>
+</head>
+<body>
+<section class="page">
+  <span class="chip">TEMA 3 · MAPA</span>
+  <h1>Streams: decir qué quieres, no cómo recorrer</h1>
+  <h2>Con un for le explicas a Java cada paso. Con un stream encadenas lambdas: «quédate con estos, transfórmalos, ordénalos, dámelos».</h2>
+  <div class="grid3">
+    <div class="card azul"><span class="ico">🏭</span><b class="t">Cadena de montaje</b>«Origen → intermedias → una final. Sin final no arranca.»<br><small>pág. 2</small></div>
+    <div class="card verde"><span class="ico">🔢</span><b class="t">Números y Optional</b>«mapToDouble + average → OptionalDouble.» «Una caja que puede estar vacía.»<br><small>pág. 3</small></div>
+    <div class="card mal"><span class="ico">⚠️</span><b class="t">Trampas</b>«equals exacto · un solo uso · count es long.»<br><small>pág. 4</small></div>
+  </div>
+  <div class="frase">Ejercicio: <span class="mono">EjerciciosStreamsOptional</span> · BioDAM bloque 3 («cero bucles») · Demo <span class="mono">S01_StreamsOptional</span>. En el tema 4, <span class="mono">Files.lines</span> es el origen.</div>
+  <span class="tag">AC · DAM 2º · Tema 3: Streams</span><span class="num">1</span>
+</section>
+
+<section class="page">
+  <span class="chip">1 · LA CADENA DE MONTAJE</span>
+  <h1>Origen → intermedias → final</h1>
+  <svg viewBox="0 0 1000 200">
+    <defs><marker id="s1" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="10" y="50" width="150" height="80" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="85" y="85" text-anchor="middle" font-size="15" font-weight="700">ORIGEN</text><text x="85" y="110" text-anchor="middle" font-size="13" class="mono">lista.stream()</text>
+    <rect x="200" y="50" width="160" height="80" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="280" y="85" text-anchor="middle" font-size="15" font-weight="700">filter</text><text x="280" y="110" text-anchor="middle" font-size="13">🚪 Predicate</text>
+    <rect x="400" y="50" width="160" height="80" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="480" y="85" text-anchor="middle" font-size="15" font-weight="700">map</text><text x="480" y="110" text-anchor="middle" font-size="13">⚙️ Function</text>
+    <rect x="600" y="50" width="160" height="80" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="680" y="85" text-anchor="middle" font-size="15" font-weight="700">sorted</text><text x="680" y="110" text-anchor="middle" font-size="13">⚖️ Comparator</text>
+    <rect x="800" y="50" width="180" height="80" rx="10" fill="#ffedd5" stroke="#ea580c" stroke-width="3"/><text x="890" y="85" text-anchor="middle" font-size="15" font-weight="700">FINAL</text><text x="890" y="110" text-anchor="middle" font-size="13" class="mono">toList()</text>
+    <path d="M162 90 L196 90" stroke="#334155" stroke-width="3" marker-end="url(#s1)"/><path d="M362 90 L396 90" stroke="#334155" stroke-width="3" marker-end="url(#s1)"/><path d="M562 90 L596 90" stroke="#334155" stroke-width="3" marker-end="url(#s1)"/><path d="M762 90 L796 90" stroke="#334155" stroke-width="3" marker-end="url(#s1)"/>
+    <text x="480" y="165" text-anchor="middle" font-size="14">intermedias: devuelven OTRO stream → se encadenan · también distinct, skip, limit</text>
+    <text x="890" y="165" text-anchor="middle" font-size="14" style="fill:#dc2626">sin final, no se ejecuta nada</text>
+  </svg>
+  <div class="grid2">
+    <table class="small">
+      <tr><th>Final</th><th>Devuelve</th></tr>
+      <tr><td class="mono">toList()</td><td>List&lt;T&gt;</td></tr>
+      <tr><td class="mono">forEach(c)</td><td>nada</td></tr>
+      <tr><td class="mono">count()</td><td><b>long</b></td></tr>
+      <tr><td class="mono">findFirst()</td><td>Optional&lt;T&gt;</td></tr>
+      <tr><td class="mono">anyMatch(p)</td><td>boolean</td></tr>
+      <tr><td class="mono">collect(Collectors.joining(", "))</td><td>String</td></tr>
+    </table>
+    <div class="card amar"><b class="t">Reglas</b>• La lista original <b>no cambia</b>.<br>• Un stream se usa <b>una sola vez</b>: para otro cálculo, otro <span class="mono">lista.stream()</span>.<br>• Por eso en BioDAM se lee el CSV a una <span class="mono">List</span> y se hacen varios streams sobre ella.</div>
+  </div>
+  <span class="num">2</span>
+</section>
+
+<section class="page">
+  <span class="chip">2-3 · NÚMEROS Y OPTIONAL</span>
+  <h1>La media y la caja que puede estar vacía</h1>
+  <div class="grid2">
+    <div>
+      <pre>OptionalDouble media = productos.stream()
+        .<span class="m">mapToDouble</span>(Producto::precio)
+        .<span class="m">average</span>();
+<span class="k">double</span> v = media.orElse(0.0);</pre>
+      <div class="card verde" style="margin-top:3mm"><b class="t">¿Por qué OptionalDouble?</b>Si la lista está vacía <b>no hay media</b>. <span class="mono">sum, max, min, average</span> solo existen tras <span class="mono">mapToInt / mapToDouble</span>.</div>
+    </div>
+    <div>
+      <svg viewBox="0 0 460 150">
+        <rect x="10" y="20" width="190" height="110" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="105" y="60" text-anchor="middle" font-size="15" font-weight="700">📦 con valor</text><text x="105" y="90" text-anchor="middle" font-size="13" class="mono">isPresent() true</text>
+        <rect x="250" y="20" width="190" height="110" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4"/><text x="345" y="60" text-anchor="middle" font-size="15" font-weight="700">📦 vacía</text><text x="345" y="90" text-anchor="middle" font-size="13" class="mono">Optional.empty()</text>
+      </svg>
+      <table class="small">
+        <tr><th>Método</th><th>Qué hace</th></tr>
+        <tr><td class="mono">orElse(x)</td><td>el valor o x</td></tr>
+        <tr><td class="mono">ifPresent(c)</td><td>ejecuta solo si hay valor</td></tr>
+        <tr><td class="mono">map(f)</td><td>transforma lo de dentro</td></tr>
+        <tr><td class="mono">get()</td><td class="code-mal">vacía → NoSuchElementException</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="frase">«En vez de devolver null, devuelvo una caja.» <span class="mono">findFirst()</span> nunca devuelve null.</div>
+  <span class="num">3</span>
+</section>
+
+<section class="page">
+  <span class="chip">4 · TRAMPAS Y EJERCICIOS</span>
+  <h1>Lo que suele fallar</h1>
+  <div class="grid3">
+    <div class="card mal"><b class="t">Texto exacto</b><span class="mono">"Informatica"</span> ≠ <span class="mono">"Informática"</span> · <span class="mono">"DIABETES"</span> ≠ <span class="mono">"Diabetes"</span>. Si no coincide, el filter no deja pasar nada.</div>
+    <div class="card mal"><b class="t">count() es long</b>No cabe en un <span class="mono">int</span> sin cast.</div>
+    <div class="card mal"><b class="t">Parámetro en singular</b><span class="mono">linea -&gt; …</span>, no <span class="mono">lines -&gt; …</span>: es un elemento.</div>
+  </div>
+  <table style="margin-top:4mm">
+    <tr><th>Ejercicio</th><th>Operaciones</th></tr>
+    <tr><td>1. Stock bajo</td><td class="mono">filter + toList</td></tr>
+    <tr><td>2. Nombres de Informática en mayúsculas</td><td class="mono">filter + map + toList</td></tr>
+    <tr><td>3. Precio medio</td><td class="mono">mapToDouble + average</td></tr>
+    <tr><td>4. Buscar por código</td><td class="mono">filter + findFirst</td></tr>
+    <tr><td>5. Resumen de incidencias abiertas</td><td class="mono">filter + sorted + map + toList</td></tr>
+    <tr><td>BioDAM</td><td class="mono">skip(1) · filter · map · distinct · sorted · average · count</td></tr>
+  </table>
+  <span class="num">4</span>
+</section>
+
+</body>
+</html>

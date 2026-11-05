@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Lambdas visual</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 9mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 6mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 6mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 12.5pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .chip { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3mm 4mm; font-size: 11pt; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 12.5pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 12.5pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 10pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+
+  .code-ok { color:#16a34a; font-weight:700 } .code-mal { color:#dc2626; font-weight:700 }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 10pt; }
+  .small { font-size: 10pt; }
+</style>
+</head>
+<body>
+<section class="page">
+  <span class="chip">TEMA 1 · MAPA</span>
+  <h1>Lambdas: pasar comportamiento, no solo datos</h1>
+  <h2>A un método ya no le pasas solo «un número»: le pasas «filtra así», «ordena así», «haz esto con cada uno».</h2>
+  <div class="grid3">
+    <div class="card azul"><span class="ico">📝</span><b class="t">Lambda</b>«Una nota con instrucciones; no se ejecuta hasta que alguien la llama.»<br><small>pág. 2 · L01</small></div>
+    <div class="card verde"><span class="ico">🧩</span><b class="t">Interfaces funcionales</b>«Portero, máquina, operario, fábrica y juez.»<br><small>pág. 3 · L02</small></div>
+    <div class="card amar"><span class="ico">⚖️</span><b class="t">Comparator y ::</b>«Negativo = a va antes.» «Clase::metodo.»<br><small>pág. 4 · L03 · L04</small></div>
+    <div class="card nar"><span class="ico">🆕</span><b class="t">record · enum · switch · Factory</b>«Clase de datos en una línea.»<br><small>pág. 5 · L05</small></div>
+    <div class="card"><span class="ico">🎫</span><b class="t">Ejercicio</b>EjercicioIncidenciasTemplate<br>(y la versión Optimizado)</div>
+    <div class="card mal"><span class="ico">⚠️</span><b class="t">Tus fallos</b>Comparator al revés y sin desempate · isEmpty vs isBlank · Consumer donde iba Function</div>
+  </div>
+  <div class="frase">Las lambdas son las piezas de los <b>streams</b> (tema 3) y de <span class="mono">Files.lines</span> (tema 4).</div>
+  <span class="tag">AC · DAM 2º · Tema 1: Lambdas</span><span class="num">1</span>
+</section>
+
+<section class="page">
+  <span class="chip">1 · QUÉ ES UNA LAMBDA</span>
+  <h1>Una nota con instrucciones</h1>
+  <svg viewBox="0 0 1000 200">
+    <rect x="20" y="40" width="300" height="110" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="170" y="80" text-anchor="middle" font-size="16" class="mono">inc -&gt; !inc.resuelta()</text>
+    <text x="170" y="115" text-anchor="middle" font-size="14">1. Se ESCRIBE y se guarda</text>
+    <text x="170" y="135" text-anchor="middle" font-size="13" style="fill:#64748b">no se ejecuta nada</text>
+    <path d="M330 95 L420 95" stroke="#334155" stroke-width="3" marker-end="url(#a1)"/>
+    <defs><marker id="a1" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="430" y="40" width="250" height="110" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+    <text x="555" y="80" text-anchor="middle" font-size="15">2. Se PASA a otro</text>
+    <text x="555" y="110" text-anchor="middle" font-size="14" class="mono">filter(abiertas)</text>
+    <text x="555" y="135" text-anchor="middle" font-size="13" style="fill:#64748b">sin ( ) detrás del nombre</text>
+    <path d="M690 95 L780 95" stroke="#334155" stroke-width="3" marker-end="url(#a1)"/>
+    <rect x="790" y="40" width="190" height="110" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="885" y="80" text-anchor="middle" font-size="15">3. Se EJECUTA</text>
+    <text x="885" y="110" text-anchor="middle" font-size="14" class="mono">abiertas.test(inc)</text>
+  </svg>
+  <div class="grid2">
+    <table>
+      <tr><th>Forma</th><th>Ejemplo</th></tr>
+      <tr><td>Sin parámetros</td><td class="mono">() -&gt; "Hola"</td></tr>
+      <tr><td>Un parámetro</td><td class="mono">inc -&gt; inc.id()</td></tr>
+      <tr><td>Varios</td><td class="mono">(a, b) -&gt; a + b</td></tr>
+      <tr><td>Con bloque</td><td class="mono">x -&gt; { ...; return y; }</td></tr>
+    </table>
+    <div class="card amar"><b class="t">Reglas</b>• Siempre se guarda en una <b>interfaz funcional</b> (un solo método abstracto).<br>• Solo usa variables de fuera <b>efectivamente finales</b>.<br>• El parámetro es <b>un</b> elemento: nombre en singular (<span class="mono">linea</span>).</div>
+  </div>
+  <div class="frase">«Una lambda es una función sin nombre que se guarda o se pasa, y no se ejecuta hasta que alguien la llama.»</div>
+  <span class="num">2</span>
+</section>
+
+<section class="page">
+  <span class="chip">2 · INTERFACES FUNCIONALES</span>
+  <h1>Cinco tipos de encargo</h1>
+  <div class="grid3">
+    <div class="card azul"><span class="ico">🚪</span><b class="t">Predicate&lt;T&gt; · test</b>El <b>portero</b>: ¿pasa o no? T → boolean<br><span class="mono">inc -&gt; !inc.resuelta()</span></div>
+    <div class="card verde"><span class="ico">⚙️</span><b class="t">Function&lt;T,R&gt; · apply</b>La <b>máquina</b>: entra una cosa, sale otra. T → R<br><span class="mono">inc -&gt; "#" + inc.id()</span></div>
+    <div class="card nar"><span class="ico">👷</span><b class="t">Consumer&lt;T&gt; · accept</b>El <b>operario</b>: hace algo, no devuelve. T → nada<br><span class="mono">inc -&gt; System.out.println(inc)</span></div>
+    <div class="card amar"><span class="ico">🏭</span><b class="t">Supplier&lt;T&gt; · get</b>La <b>fábrica</b>: no recibe, da algo. nada → T<br><span class="mono">() -&gt; Math.random()</span></div>
+    <div class="card"><span class="ico">⚖️</span><b class="t">Comparator&lt;T&gt; · compare</b>El <b>juez</b>: ¿quién va antes? T, T → int</div>
+    <div class="card mal"><span class="ico">🤔</span><b class="t">¿Cuál elijo?</b>¿boolean? → Predicate<br>¿no devuelve? → Consumer<br>¿no recibe? → Supplier<br>¿recibe y devuelve? → Function</div>
+  </div>
+  <pre style="margin-top:3mm">Predicate&lt;Incidencia&gt; urgentes = datosValidos.<span class="m">and</span>(abiertas).<span class="m">and</span>(prioridadAlta);   <span class="c">// también or, negate</span>
+Function&lt;Incidencia,String&gt; r2 = resumen.<span class="m">andThen</span>(String::toUpperCase);
+lista.removeIf(predicate);  lista.forEach(consumer);  lista.sort(comparator);  map.merge(k, 1, Integer::sum);</pre>
+  <span class="num">3</span>
+</section>
+
+<section class="page">
+  <span class="chip">3-4 · COMPARATOR Y REFERENCIAS A MÉTODOS</span>
+  <h1>El juez y los atajos</h1>
+  <div class="grid2">
+    <div>
+      <table>
+        <tr><th>compare(a, b)</th><th>Significa</th></tr>
+        <tr><td>negativo</td><td><b>a va antes</b></td></tr>
+        <tr><td>0</td><td>empate</td></tr>
+        <tr><td>positivo</td><td>a va después</td></tr>
+      </table>
+      <pre style="margin-top:3mm"><span class="c">// ALTA primero; si empatan, id menor</span>
+Comparator.comparingInt((Incidencia i) -&gt; i.prioridad().peso())
+          .<span class="m">reversed</span>()
+          .<span class="m">thenComparingInt</span>(Incidencia::id);
+
+<span class="c">// a mano, descendente: se intercambian a y b</span>
+(a, b) -&gt; Integer.compare(b.peso(), a.peso())</pre>
+    </div>
+    <div>
+      <table>
+        <tr><th>Lambda</th><th>Referencia</th></tr>
+        <tr><td class="mono">x -&gt; System.out.println(x)</td><td class="mono">System.out::println</td></tr>
+        <tr><td class="mono">inc -&gt; inc.id()</td><td class="mono">Incidencia::id</td></tr>
+        <tr><td class="mono">s -&gt; Integer.parseInt(s)</td><td class="mono">Integer::parseInt</td></tr>
+        <tr><td class="mono">() -&gt; new ArrayList&lt;&gt;()</td><td class="mono">ArrayList::new</td></tr>
+      </table>
+      <div class="card mal" style="margin-top:3mm"><b class="t">Tu fallo</b><span class="mono">porPrioridad</span> ordenaba de BAJA a ALTA y no desempataba por id.</div>
+    </div>
+  </div>
+  <div class="frase">«Negativo = a va antes.» · «Si la lambda solo llama a un método, escribe <span class="mono">Clase::metodo</span>.»</div>
+  <span class="num">4</span>
+</section>
+
+<section class="page">
+  <span class="chip">5 · JAVA MODERNO</span>
+  <h1>record · enum · switch · Factory</h1>
+  <div class="grid2">
+    <pre><span class="k">record</span> Incidencia(<span class="k">int</span> id, String usuario, Prioridad prioridad, <span class="k">boolean</span> resuelta) { }
+inc.id();   <span class="c">// getter SIN get · inmutable</span>
+
+<span class="k">enum</span> Prioridad {
+    ALTA(3), MEDIA(2), BAJA(1);
+    <span class="k">private final int</span> peso;
+    Prioridad(<span class="k">int</span> peso) { <span class="k">this</span>.peso = peso; }
+}
+
+String t = <span class="k">switch</span> (p) {      <span class="c">// sin break, devuelve valor</span>
+    <span class="k">case</span> ALTA -&gt; <span class="g">"Urgente"</span>;
+    <span class="k">case</span> MEDIA, BAJA -&gt; <span class="g">"Normal"</span>;
+};</pre>
+    <div>
+      <div class="card azul"><b class="t">record</b>Constructor, getters, equals, hashCode y toString automáticos. Sin setters.</div>
+      <div class="card verde" style="margin-top:3mm"><b class="t">Interfaz genérica</b><span class="mono">FuenteDatos&lt;T&gt;</span>: el mismo contrato para cualquier tipo. En el tema 4 (F03) se implementa con un CSV de verdad.</div>
+      <div class="card amar" style="margin-top:3mm"><b class="t">Factory</b><span class="mono">FuenteDatosFactory.crear("incidencias")</span> decide qué clase crear; quien llama solo ve la interfaz.</div>
+    </div>
+  </div>
+  <span class="num">5</span>
+</section>
+
+</body>
+</html>

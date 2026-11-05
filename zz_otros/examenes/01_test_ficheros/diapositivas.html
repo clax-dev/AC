@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Test Ficheros AC</title>
+<style>
+  @page { size: 338.67mm 190.5mm; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: #1e293b; background: #fff; }
+  .s { width: 338.67mm; height: 190.5mm; padding: 11mm 16mm 10mm; page-break-after: always; position: relative;
+       overflow: hidden; display: flex; flex-direction: column; }
+  .s:last-child { page-break-after: auto; }
+  .s::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5mm; background: var(--c, #2563eb); }
+  .n { position: absolute; right: 14mm; bottom: 6mm; font-size: 10pt; color: #64748b; }
+  .k { position: absolute; left: 16mm; bottom: 6mm; font-size: 9pt; color: #94a3b8; }
+  .tag { font-size: 10pt; font-weight: 700; color: var(--c, #2563eb); letter-spacing: .5px; text-transform: uppercase; }
+  h1 { font-size: 25pt; margin: 1mm 0 4mm; }
+  h2 { font-size: 14pt; margin: 3mm 0 2mm; }
+  p, li { font-size: 13pt; line-height: 1.4; margin: 0 0 1.6mm; }
+  ul { margin: 0; padding-left: 6mm; }
+  code, .m { font-family: Consolas, monospace; font-size: .92em; background: #f1f5f9; padding: 0 1mm; border-radius: 1mm; }
+  pre { font-family: Consolas, monospace; font-size: 11pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 2mm 0; line-height: 1.4; }
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; align-items: start; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; align-items: start; }
+  table { border-collapse: collapse; width: 100%; font-size: 12pt; }
+  th, td { border: 1px solid #cbd5e1; padding: 1.6mm 3mm; text-align: left; vertical-align: top; }
+  th { background: #f1f5f9; }
+  .box { border: 1.5px solid #cbd5e1; border-radius: 3mm; padding: 3mm 4mm; }
+  .clave { margin-top: auto; background: #eff6ff; border-left: 5px solid var(--c, #2563eb); padding: 3mm 5mm;
+           font-size: 13pt; border-radius: 0 3mm 3mm 0; }
+  .trap { background: #fef2f2; border-color: #fca5a5; }
+  .ok { color: #16a34a; font-weight: 700; } .no { color: #dc2626; font-weight: 700; }
+  .portada { justify-content: center; }
+  .portada h1 { font-size: 40pt; }
+</style>
+</head>
+<body>
+
+<section class="s portada">
+  <div class="tag">Acceso a Datos · DAM 2º · Tema 4</div>
+  <h1>Ficheros en Java</h1>
+  <p style="font-size:17pt">Diapositivas de repaso para el test tipo test.</p>
+  <p>Contenido: rutas (<code>Path</code>, <code>File</code>, <code>Files</code>) · crear, mover y borrar · leer y escribir texto · opciones de apertura · excepciones · Path Traversal · CSV · binario (<code>DataInputStream</code>/<code>DataOutputStream</code>) · serialización · acceso aleatorio (<code>RandomAccessFile</code>) · <code>ByteBuffer</code> y <code>FileChannel</code> · Excel con Apache POI · fechas para nombres de fichero.</p>
+  <p style="color:#64748b">Cada diapositiva termina con una <b>idea clave</b>. Las trampas típicas de examen van en rojo.</p>
+  <span class="n">1</span>
+</section>
+
+<section class="s">
+  <div class="tag">1 · Conceptos básicos</div>
+  <h1>¿Por qué ficheros? Texto frente a binario</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Las variables viven en la <b>memoria RAM</b>, que se borra cuando termina el programa.</li>
+        <li>Un <b>fichero</b> está en el <b>disco</b> y conserva los datos aunque se apague el ordenador. Es la forma más básica de <b>persistencia</b>.</li>
+        <li>Una <b>carpeta o directorio</b> no guarda datos: solo agrupa ficheros y otras carpetas.</li>
+        <li>Por dentro, <b>todo fichero son bytes</b> (valores de 0 a 255).</li>
+      </ul>
+    </div>
+    <table>
+      <tr><th></th><th>Fichero de texto</th><th>Fichero binario</th></tr>
+      <tr><td>Los bytes son…</td><td>letras (caracteres)</td><td>datos en bruto</td></tr>
+      <tr><td>Bloc de notas</td><td>se lee</td><td>símbolos raros</td></tr>
+      <tr><td>Ejemplos</td><td>.txt .csv .log .properties</td><td>.dat .bin .ser .jpg .xlsx</td></tr>
+      <tr><td>Clases Java</td><td>Reader / Writer</td><td>InputStream / OutputStream</td></tr>
+      <tr><td>Ventaja</td><td>legible por personas</td><td>ocupa menos, más rápido</td></tr>
+    </table>
+  </div>
+  <p style="margin-top:3mm">Ejemplo: el número 2000000 como texto ocupa 7 caracteres; como <code>int</code> binario ocupa siempre 4 bytes.</p>
+  <div class="clave"><b>Idea clave:</b> texto = bytes que representan letras; binario = bytes que representan datos. Los dos son bytes.</div>
+  <span class="n">2</span>
+</section>
+
+<section class="s">
+  <div class="tag">2 · Rutas</div>
+  <h1>Una ruta NO es el fichero</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Una <b>ruta</b> es la dirección de un fichero o carpeta. En Java es un objeto <code>Path</code> (moderno, <code>java.nio.file</code>) o <code>File</code> (antiguo, <code>java.io</code>).</li>
+        <li><b>Crear un <code>Path</code> no toca el disco</b>: no crea nada y no falla aunque el fichero no exista.</li>
+        <li>El disco se toca al usar <code>Files</code>: <code>createDirectories</code>, <code>write</code>, <code>move</code>… y eso sí puede lanzar <code>IOException</code>.</li>
+        <li><code>Path</code> es <b>inmutable</b>: <code>resolve</code>, <code>normalize</code> y <code>toAbsolutePath</code> devuelven una ruta nueva que hay que guardar.</li>
+      </ul>
+    </div>
+    <div>
+      <pre>Path carpeta = Paths.get("salida", "config"); // = Path.of(...)
+Path fichero = carpeta.resolve("app.properties");
+fichero.getFileName();     // app.properties
+fichero.getParent();       // salida/config
+fichero.toAbsolutePath();  // C:\...\salida\config\app.properties
+Paths.get("a/b/../c").normalize();  // a/c</pre>
+      <div class="box"><b>Absoluta:</b> desde la unidad (<code>C:/DAM/...</code>).<br><b>Relativa:</b> (<code>"datos/mapa.dat"</code>) se completa con el <b>directorio de trabajo</b>, la carpeta desde la que se ejecuta el programa.</div>
+    </div>
+  </div>
+  <div class="clave"><b>Idea clave:</b> escribir la dirección en el sobre no construye la casa. Si «no encuentra el fichero», imprime <code>toAbsolutePath()</code>.</div>
+  <span class="n">3</span>
+</section>
+
+<section class="s">
+  <div class="tag">3 · File frente a Files</div>
+  <h1>Dos APIs: java.io.File y java.nio.file</h1>
+  <table>
+    <tr><th>Quiero…</th><th>java.io.File (antigua, Java 1)</th><th>java.nio.file.Files (moderna, Java 7)</th></tr>
+    <tr><td>Si algo falla</td><td class="no">devuelve false, sin decir por qué</td><td class="ok">lanza una excepción concreta</td></tr>
+    <tr><td>Forma de llamar</td><td>método del objeto: <code>f.mkdir()</code></td><td>método static: <code>Files.createDirectory(p)</code></td></tr>
+    <tr><td>Crear carpeta / anidadas</td><td><code>mkdir()</code> / <code>mkdirs()</code></td><td><code>createDirectory(p)</code> / <code>createDirectories(p)</code></td></tr>
+    <tr><td>Crear fichero vacío</td><td><code>createNewFile()</code></td><td><code>createFile(p)</code></td></tr>
+    <tr><td>Mover o renombrar</td><td><code>renameTo(destino)</code></td><td><code>move(origen, destino)</code></td></tr>
+    <tr><td>Borrar</td><td><code>delete()</code></td><td><code>delete(p)</code> / <code>deleteIfExists(p)</code></td></tr>
+    <tr><td>¿Existe? / tamaño</td><td><code>exists()</code> / <code>length()</code> (0 si no existe)</td><td><code>exists(p)</code> / <code>size(p)</code></td></tr>
+    <tr><td>Listar una carpeta</td><td><code>listFiles()</code> → <code>File[]</code></td><td><code>list(p)</code> → <code>Stream&lt;Path&gt;</code></td></tr>
+    <tr><td>Nombre / ruta completa</td><td><code>getName()</code> / <code>getAbsolutePath()</code></td><td><code>getFileName()</code> / <code>toAbsolutePath()</code></td></tr>
+    <tr><td>Convertir</td><td><code>f.toPath()</code></td><td><code>p.toFile()</code></td></tr>
+  </table>
+  <div class="clave"><b>Idea clave:</b> <code>mkdir()</code> = false puede significar «ya existía», «sin permiso» o «no existe la carpeta padre»: con <code>File</code> no se sabe. Con <code>Files</code> lo dice la excepción.</div>
+  <span class="n">4</span>
+</section>
+
+<section class="s">
+  <div class="tag">4 · Operaciones con carpetas y ficheros</div>
+  <h1>Crear, mover, copiar y borrar</h1>
+  <div class="g2">
+    <ul>
+      <li><code>createDirectory(p)</code>: crea <b>una</b> carpeta; falla si no existe la carpeta padre o si ya existe.</li>
+      <li><code>createDirectories(p)</code>: crea <b>toda la cadena</b>; <b>no falla si ya existe</b>. Es la forma segura.</li>
+      <li><code>createFile(p)</code>: crea un fichero vacío; falla si ya existe.</li>
+      <li><b>Mover y renombrar son la misma operación</b> (<code>Files.move</code> / <code>renameTo</code>): ambas cambian la dirección.</li>
+      <li>En el mismo disco, mover es <b>instantáneo</b>: no copia datos.</li>
+      <li>Una carpeta <b>solo se borra si está vacía</b> → si no, <code>DirectoryNotEmptyException</code>.</li>
+      <li><code>delete(p)</code> lanza <code>NoSuchFileException</code> si no existe; <code>deleteIfExists(p)</code> devuelve <code>false</code>.</li>
+    </ul>
+    <div>
+      <pre>Files.move(DESDE, HASTA, StandardCopyOption.REPLACE_EXISTING);
+Files.copy(origen, copia, StandardCopyOption.REPLACE_EXISTING);</pre>
+      <div class="box trap"><b>Trampas de move/copy:</b><br>• El orden es <code>move(origen, destino)</code>.<br>• El destino es la ruta <b>completa con el nombre</b>: <code>.../ejercicios/carpeta</code>, no <code>.../ejercicios</code>.<br>• La carpeta de destino <b>tiene que existir</b>.<br>• Si el destino existe y no pasas <code>REPLACE_EXISTING</code> → <code>FileAlreadyExistsException</code>.<br>• En Windows no se puede mover un fichero abierto.</div>
+    </div>
+  </div>
+  <div class="clave"><b>Idea clave:</b> mover = cambiar la dirección; el destino lleva el nombre final y su carpeta debe existir.</div>
+  <span class="n">5</span>
+</section>
+
+<section class="s">
+  <div class="tag">4 · Listar carpetas</div>
+  <h1>Listar y recursividad</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li><code>File.listFiles()</code> y <code>Files.list(p)</code> devuelven <b>solo el primer nivel</b> de la carpeta.</li>
+        <li>Para recorrer todas las subcarpetas se usa <b>recursividad</b>: si un elemento es carpeta, el método <b>se llama a sí mismo</b> con ella.</li>
+        <li>El <b>caso base</b> es llegar a una carpeta sin subcarpetas: ahí la recursión termina sola.</li>
+        <li>Alternativa NIO: <code>Files.walk(p)</code> recorre todos los niveles.</li>
+        <li><code>Files.list</code> y <code>Files.walk</code> devuelven un <code>Stream</code> que deja la carpeta abierta: van en <b>try-with-resources</b>.</li>
+      </ul>
+    </div>
+    <pre>static void listar(File carpeta, int nivel) {
+    for (File h : carpeta.listFiles()) {
+        String sangria = "  ".repeat(nivel);
+        if (h.isDirectory()) {
+            System.out.println(sangria + "[DIR] " + h.getName());
+            listar(h, nivel + 1);      // recursividad
+        } else {
+            System.out.println(sangria + "[FILE] " + h.getName());
+        }
+    }
+}
+
+try (Stream&lt;Path&gt; s = Files.list(carpeta)) {
+    s.forEach(p -&gt; System.out.println(p.getFileName()));
+}</pre>
+  </div>
+  <div class="clave"><b>Idea clave:</b> listar = un nivel; para todos los niveles, recursividad (o <code>Files.walk</code>).</div>
+  <span class="n">6</span>
+</section>
+
+<section class="s">
+  <div class="tag">5 · Leer y escribir</div>
+  <h1>Abrir, usar, cerrar: try-with-resources</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Toda lectura o escritura: <b>abrir → usar → cerrar</b>.</li>
+        <li>Al escribir, Java acumula los datos en un <b>búfer</b> (memoria) y los manda al disco por bloques. <b>Cerrar vacía el búfer.</b> Sin cerrar, lo último escrito puede <b>no llegar al disco</b>.</li>
+        <li>Un fichero abierto queda <b>bloqueado</b> por el sistema (en Windows no se puede borrar ni mover).</li>
+        <li><b>try-with-resources:</b> el recurso declarado en los paréntesis del <code>try</code> se <b>cierra automáticamente</b> al salir, haya excepción o no. Funciona con cualquier clase que implemente <code>AutoCloseable</code>.</li>
+        <li>Se pueden abrir <b>varios recursos</b> en el mismo <code>try</code>, separados por <code>;</code>.</li>
+      </ul>
+    </div>
+    <pre>try (BufferedWriter bw = Files.newBufferedWriter(p)) {
+    bw.write("línea 1");
+    bw.newLine();
+}   // aquí se cierra solo
+
+try (InputStream in = Files.newInputStream(a);
+     OutputStream out = Files.newOutputStream(b)) {
+    in.transferTo(out);
+}</pre>
+  </div>
+  <div class="clave"><b>Idea clave:</b> lo que se abre va en <code>try ( )</code> y se cierra solo. Sin cerrar, el búfer no llega al disco.</div>
+  <span class="n">7</span>
+</section>
+
+<section class="s">
+  <div class="tag">5 · Ficheros de texto</div>
+  <h1>Leer y escribir texto con Files</h1>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th><th>Devuelve</th><th>¿Hay que cerrarlo?</th></tr>
+    <tr><td><code>Files.readAllLines(p)</code></td><td>Lee todas las líneas de golpe</td><td><code>List&lt;String&gt;</code></td><td>No</td></tr>
+    <tr><td><code>Files.readString(p)</code></td><td>Lee todo en un solo texto</td><td><code>String</code></td><td>No</td></tr>
+    <tr><td><code>Files.lines(p)</code></td><td>Lee como stream (filter, map, count…)</td><td><code>Stream&lt;String&gt;</code></td><td class="no">Sí: try ( )</td></tr>
+    <tr><td><code>Files.newBufferedReader(p)</code> + <code>readLine()</code></td><td>Línea a línea</td><td><code>String</code>, o <b>null</b> al final</td><td class="no">Sí</td></tr>
+    <tr><td><code>Files.write(p, lista, op…)</code></td><td>Escribe una línea por elemento</td><td><code>Path</code></td><td>No</td></tr>
+    <tr><td><code>Files.writeString(p, texto, op…)</code></td><td>Escribe un String <b>sin añadir salto de línea</b></td><td><code>Path</code></td><td>No</td></tr>
+    <tr><td><code>Files.newBufferedWriter(p)</code></td><td><code>write()</code> + <code>newLine()</code></td><td><code>BufferedWriter</code></td><td class="no">Sí</td></tr>
+  </table>
+  <ul style="margin-top:3mm">
+    <li><code>readAllLines</code> con un fichero enorme llena la memoria; para eso, <code>lines</code> o <code>BufferedReader</code>.</li>
+    <li><code>Files.write(ruta, "un String")</code> <b>no compila</b>: para un String se usa <code>writeString</code>. Para separar líneas: <code>+ System.lineSeparator()</code>.</li>
+    <li><b>Codificación:</b> usa siempre <b>UTF-8</b> (<code>StandardCharsets.UTF_8</code>), que es lo que usa <code>Files</code> por defecto. Si escribes y lees con codificaciones distintas, la ñ sale como <code>Ã±</code>.</li>
+    <li>Un stream <b>solo se recorre una vez</b>; <code>count()</code> devuelve <code>long</code>.</li>
+  </ul>
+  <span class="n">8</span>
+</section>
+
+<section class="s">
+  <div class="tag">6 · Opciones de apertura</div>
+  <h1>¿Qué pasa si el fichero ya existe? StandardOpenOption</h1>
+  <table>
+    <tr><th>Opción</th><th>Si NO existe</th><th>Si YA existe</th><th>Uso típico</th></tr>
+    <tr><td><i>(ninguna)</i></td><td>lo crea</td><td><b>lo vacía y escribe desde cero</b> (CREATE + TRUNCATE_EXISTING + WRITE)</td><td>datos que se regeneran</td></tr>
+    <tr><td><code>CREATE_NEW</code></td><td>lo crea</td><td><b>se niega</b>: <code>FileAlreadyExistsException</code></td><td>ficheros de configuración</td></tr>
+    <tr><td><code>CREATE</code> + <code>APPEND</code></td><td>lo crea</td><td><b>añade al final</b> sin borrar</td><td>logs</td></tr>
+    <tr><td><code>APPEND</code> solo</td><td class="no">falla (NoSuchFileException)</td><td>añade al final</td><td>—</td></tr>
+    <tr><td><code>TRUNCATE_EXISTING</code></td><td>—</td><td>lo vacía antes de escribir</td><td></td></tr>
+    <tr><td><code>READ</code> / <code>WRITE</code></td><td colspan="3">abrir para leer / para escribir (sobre todo con <code>FileChannel</code>)</td></tr>
+  </table>
+  <h2>StandardCopyOption (para copy y move)</h2>
+  <p><code>REPLACE_EXISTING</code>: sobrescribe el destino · <code>ATOMIC_MOVE</code>: mover en un solo paso · <code>COPY_ATTRIBUTES</code>: copia fechas y permisos.</p>
+  <div class="clave"><b>¿Por qué CREATE_NEW y no <code>if (!Files.exists(p)) write</code>?</b> Entre comprobar y escribir hay un hueco en el que otro proceso puede crear el fichero. <code>CREATE_NEW</code> lo hace en una sola operación <b>atómica</b>.</div>
+  <span class="n">9</span>
+</section>
+
+<section class="s">
+  <div class="tag">7 · Excepciones</div>
+  <h1>Excepciones de entrada/salida</h1>
+  <div class="g2">
+    <table>
+      <tr><th>Excepción</th><th>Cuándo salta</th></tr>
+      <tr><td><code>IOException</code></td><td>Madre de todas. <b>Checked</b>: obligatorio tratarla</td></tr>
+      <tr><td><code>NoSuchFileException</code></td><td>No existe (con Files)</td></tr>
+      <tr><td><code>FileNotFoundException</code></td><td>No existe (clases antiguas de java.io)</td></tr>
+      <tr><td><code>FileAlreadyExistsException</code></td><td>Ya existe (CREATE_NEW, createFile, createDirectory, move/copy sin REPLACE)</td></tr>
+      <tr><td><code>DirectoryNotEmptyException</code></td><td>Borrar una carpeta con contenido</td></tr>
+      <tr><td><code>AccessDeniedException</code></td><td>Sin permisos</td></tr>
+      <tr><td><code>EOFException</code></td><td>Fin de fichero al leer con DataInputStream / ObjectInputStream</td></tr>
+      <tr><td><code>NotSerializableException</code></td><td>Serializar una clase sin Serializable</td></tr>
+      <tr><td><code>InvalidClassException</code></td><td>serialVersionUID distinto</td></tr>
+      <tr><td><code>InvalidPathException</code></td><td>Caracteres no válidos en la ruta (unchecked)</td></tr>
+    </table>
+    <div>
+      <ul>
+        <li><b>Checked</b> = Java obliga a capturarla (<code>try/catch</code>) o declararla (<code>throws IOException</code>).</li>
+        <li>Captura la excepción <b>concreta</b> que esperas: si pasa otra cosa (permisos), no la confundes.</li>
+        <li>En varios <code>catch</code>, de la <b>más concreta a la más general</b>; si <code>IOException</code> va primero, las siguientes no compilan.</li>
+        <li><code>throw</code> lanza una excepción ahora; <code>throws</code> en la firma avisa de que puede lanzarse.</li>
+      </ul>
+      <pre>try {
+    Files.write(cfg, props, StandardOpenOption.CREATE_NEW);
+} catch (FileAlreadyExistsException e) {
+    System.out.println("Ya existía: no lo toco");
+}</pre>
+    </div>
+  </div>
+  <span class="n">10</span>
+</section>
+
+<section class="s">
+  <div class="tag">8 · Seguridad</div>
+  <h1>Path Traversal</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Ataque en el que el usuario mete <code>..</code> («subir una carpeta») en una ruta para <b>salirse de la carpeta permitida</b>.</li>
+        <li><code>datos/../../etc/passwd</code> <b>empieza</b> por «datos», pero sube dos niveles y acaba fuera.</li>
+        <li><b>Defensa:</b><br>1. Pasar <b>las dos rutas</b> (base y la del usuario) a <code>toAbsolutePath()</code> y <b>después</b> <code>normalize()</code>, que resuelve los <code>..</code>.<br>2. Comprobar con <code>Path.startsWith(base)</code>.<br>3. Si no empieza por la base: <code>SecurityException</code>.</li>
+        <li><code>Path.startsWith</code> compara <b>carpeta a carpeta</b>; <code>String.startsWith</code> compara <b>letra a letra</b> y deja pasar <code>"datos2/secreto.txt"</code> como si estuviera en <code>"datos"</code>.</li>
+      </ul>
+    </div>
+    <div>
+      <pre>Path base = Paths.get("datos").toAbsolutePath().normalize();
+Path cand = Paths.get(rutaUsuario).toAbsolutePath().normalize();
+if (!cand.startsWith(base)) {
+    throw new SecurityException("Fuera de datos/: " + rutaUsuario);
+}</pre>
+      <table>
+        <tr><th>Ruta</th><th>Resultado</th></tr>
+        <tr><td><code>datos/informe.csv</code></td><td class="ok">dentro</td></tr>
+        <tr><td><code>datos/../../etc/passwd</code></td><td class="no">fuera</td></tr>
+        <tr><td><code>datos/sub/../informe.csv</code></td><td class="ok">dentro</td></tr>
+        <tr><td><code>datos2/secreto.txt</code></td><td class="no">fuera (con Path)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="clave"><b>Idea clave:</b> normaliza las dos rutas y compara carpeta a carpeta, nunca letra a letra.</div>
+  <span class="n">11</span>
+</section>
+
+<section class="s">
+  <div class="tag">9 · Fechas en nombres de fichero y logs</div>
+  <h1>LocalDateTime y DateTimeFormatter</h1>
+  <div class="g2">
+    <div>
+      <pre>DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+String nombre = "auditoria_" + LocalDateTime.now().format(f) + ".log";
+Path log = Paths.get("salida", "logs").resolve(nombre);
+
+String linea = "[" + LocalDateTime.now().format(
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+        + "] INFO Aplicación iniciada" + System.lineSeparator();
+Files.writeString(log, linea, StandardOpenOption.CREATE,
+                               StandardOpenOption.APPEND);</pre>
+      <ul>
+        <li>En un nombre de fichero, <b>solo dígitos</b>: <code>/</code> crea carpetas y <code>:</code> no se permite en Windows (<code>InvalidPathException</code>).</li>
+        <li>El molde se aplica: <code>fecha.format(molde)</code>.</li>
+      </ul>
+    </div>
+    <table>
+      <tr><th>Letra</th><th>Significa</th></tr>
+      <tr><td><code>yyyy</code></td><td>año</td></tr>
+      <tr><td><code>MM</code></td><td><b>mes</b></td></tr>
+      <tr><td><code>dd</code></td><td>día</td></tr>
+      <tr><td><code>HH</code></td><td>hora 0–23</td></tr>
+      <tr><td><code>hh</code></td><td>hora 1–12</td></tr>
+      <tr><td><code>mm</code></td><td><b>minutos</b></td></tr>
+      <tr><td><code>ss</code></td><td>segundos</td></tr>
+      <tr><td><code>SSS</code></td><td>milisegundos</td></tr>
+    </table>
+  </div>
+  <div class="clave"><b>Trampa:</b> <code>MM</code> (mes) ≠ <code>mm</code> (minutos) y <code>HH</code> ≠ <code>hh</code>. Compila igual, pero la fecha sale mal.</div>
+  <span class="n">12</span>
+</section>
+
+<section class="s">
+  <div class="tag">10 · Guardar objetos (1)</div>
+  <h1>CSV: objetos como líneas de texto</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li><b>CSV</b>: una línea por objeto, campos separados por <code>;</code> o <code>,</code>. La primera línea es la <b>cabecera</b>.</li>
+        <li><b>Guardar</b> (objeto → línea): <code>String.join(";", campos)</code>.</li>
+        <li><b>Cargar</b> (línea → objeto): <code>skip(1)</code> para la cabecera, <code>split(";")</code> y convertir cada trozo: <code>Integer.parseInt</code>, <code>Double.parseDouble</code>.</li>
+        <li><code>split</code> devuelve <code>String[]</code>: los trozos <b>siguen siendo texto</b>.</li>
+        <li><code>Double.parseDouble("25,90")</code> → <code>NumberFormatException</code>: Java usa <b>punto</b>. Al escribir: <code>String.format(Locale.ROOT, "%.2f", x)</code>.</li>
+        <li><b>Ventaja:</b> legible, lo abre Excel y cualquier lenguaje. <b>Inconveniente:</b> convertir cada campo a mano.</li>
+      </ul>
+    </div>
+    <pre>codigo;nombre;precio;stock
+P001;Teclado;25.90;12
+
+try (Stream&lt;String&gt; s = Files.lines(csv)) {
+    List&lt;Producto&gt; lista = s
+        .skip(1)                         // cabecera
+        .filter(l -&gt; !l.isBlank())
+        .map(l -&gt; {
+            String[] c = l.split(";");
+            return new Producto(c[0], c[1],
+                Double.parseDouble(c[2]),
+                Integer.parseInt(c[3]));
+        })
+        .toList();
+}</pre>
+  </div>
+  <span class="n">13</span>
+</section>
+
+<section class="s">
+  <div class="tag">10 · Guardar objetos (2)</div>
+  <h1>Binario: DataOutputStream y DataInputStream</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Escriben y leen <b>tipos primitivos</b> en binario: <code>writeInt</code>, <code>writeDouble</code>, <code>writeUTF</code>, <code>writeBoolean</code>… / <code>readInt</code>, <code>readDouble</code>, <code>readUTF</code>…</li>
+        <li>El fichero <b>no tiene etiquetas</b>: solo bytes seguidos.</li>
+        <li><b>Regla de oro:</b> leer en el <b>mismo orden y con los mismos tipos</b> con que se escribió. Si no, no hay error: salen valores sin sentido.</li>
+        <li><b>Fin del fichero:</b> no devuelve null ni -1; lanza <b><code>EOFException</code></b>.</li>
+        <li>Se suelen envolver: <code>DataOutputStream(BufferedOutputStream(FileOutputStream))</code>. Abrir un OutputStream <b>vacía</b> el fichero.</li>
+        <li><code>InputStream.read(byte[])</code> devuelve <b>-1</b> al final (es distinto de <code>readInt</code>).</li>
+      </ul>
+    </div>
+    <div>
+      <table>
+        <tr><th>Tipo</th><th>Bytes</th></tr>
+        <tr><td>byte, boolean</td><td>1</td></tr>
+        <tr><td>short, char</td><td>2</td></tr>
+        <tr><td>int, float</td><td>4</td></tr>
+        <tr><td>long, double</td><td>8</td></tr>
+        <tr><td>String con writeUTF</td><td>2 (longitud) + bytes del texto</td></tr>
+      </table>
+      <pre>try (DataInputStream in = new DataInputStream(
+        new FileInputStream("productos.dat"))) {
+    while (true) {
+        String cod = in.readUTF();
+        double pre = in.readDouble();
+        int stock = in.readInt();
+    }
+} catch (EOFException fin) { /* fin normal */ }</pre>
+    </div>
+  </div>
+  <span class="n">14</span>
+</section>
+
+<section class="s">
+  <div class="tag">10 · Guardar objetos (3)</div>
+  <h1>Serialización: ObjectOutputStream y ObjectInputStream</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li><b>Serializar</b> = convertir un objeto entero en bytes. <b>Deserializar</b> = reconstruirlo.</li>
+        <li><code>writeObject(obj)</code> / <code>readObject()</code>. Se puede guardar una <b>lista entera</b> de una vez.</li>
+        <li>La clase debe <b><code>implements Serializable</code></b>: interfaz <b>marcadora</b>, sin métodos. Si no → <code>NotSerializableException</code>.</li>
+        <li>Sus atributos también deben ser serializables.</li>
+        <li><b><code>serialVersionUID</code></b>: número de versión de la clase. Si no coincide con el del fichero → <code>InvalidClassException</code>.</li>
+        <li><b><code>transient</code></b>: el atributo <b>no se guarda</b>; al leer vale <code>null</code>, <code>0</code> o <code>false</code>. Uso: contraseñas.</li>
+        <li><code>readObject()</code> devuelve <code>Object</code> → hace falta <b>cast</b>. Puede lanzar <code>ClassNotFoundException</code>.</li>
+        <li>Solo lo entiende <b>Java</b>.</li>
+      </ul>
+    </div>
+    <pre>class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    String nombre;
+    transient String password;   // no se guarda
+}
+
+try (ObjectOutputStream out = new ObjectOutputStream(
+        Files.newOutputStream(f))) {
+    out.writeObject(lista);
+}
+try (ObjectInputStream in = new ObjectInputStream(
+        Files.newInputStream(f))) {
+    List&lt;Usuario&gt; l = (List&lt;Usuario&gt;) in.readObject();
+}</pre>
+  </div>
+  <span class="n">15</span>
+</section>
+
+<section class="s">
+  <div class="tag">10 · Guardar objetos (4)</div>
+  <h1>Acceso aleatorio: RandomAccessFile</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li><b>Acceso secuencial:</b> para llegar al registro 1000 hay que leer los 999 anteriores (como una cinta).</li>
+        <li><b>Acceso aleatorio o directo:</b> se salta a cualquier posición con <code>seek(pos)</code> (como un array).</li>
+        <li>Requisito: <b>registros de tamaño fijo</b>. Posición del registro n (empezando en 0) = <b>n × tamaño del registro</b>.</li>
+        <li>Los textos se <b>rellenan con espacios</b> hasta un tamaño fijo. <code>writeChars</code> usa <b>2 bytes por carácter</b>.</li>
+        <li>Modos: <code>"r"</code> (leer) y <code>"rw"</code> (leer y escribir).</li>
+        <li>Métodos: <code>seek</code>, <code>getFilePointer</code>, <code>length</code>, <code>setLength</code> + los <code>readXxx</code>/<code>writeXxx</code> de Data*Stream.</li>
+        <li>Escribir <b>sobrescribe</b> (no inserta). Ventaja: <b>modificar un solo registro</b> sin reescribir el fichero.</li>
+        <li>Número de registros = <code>length() / TAM</code>.</li>
+      </ul>
+    </div>
+    <div>
+      <table>
+        <tr><th>Campo</th><th>Tipo</th><th>Bytes</th><th>Desde</th></tr>
+        <tr><td>id</td><td>int</td><td>4</td><td>0</td></tr>
+        <tr><td>nombre</td><td>20 chars</td><td>40</td><td>4</td></tr>
+        <tr><td>precio</td><td>double</td><td>8</td><td>44</td></tr>
+        <tr><td>stock</td><td>int</td><td>4</td><td>52</td></tr>
+        <tr><th colspan="2">TOTAL</th><th>56</th><th></th></tr>
+      </table>
+      <pre>try (RandomAccessFile raf =
+        new RandomAccessFile("prod.dat", "rw")) {
+    raf.seek(2L * 56);            // registro 2
+    int id = raf.readInt();
+    raf.seek(1L * 56 + 52);       // stock del registro 1
+    raf.writeInt(50);
+}</pre>
+    </div>
+  </div>
+  <span class="n">16</span>
+</section>
+
+<section class="s">
+  <div class="tag">11 · NIO</div>
+  <h1>ByteBuffer y FileChannel</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li><b><code>FileChannel</code></b> (<code>java.nio.channels</code>): la conexión con el fichero, como una tubería. Lee y escribe en la posición que elijas.</li>
+        <li><b><code>ByteBuffer</code></b> (<code>java.nio</code>): una caja de bytes en memoria de tamaño fijo. Se llena con <code>putInt</code>, <code>put(byte[])</code>… y se vacía con <code>getInt</code>, <code>getLong</code>…</li>
+        <li>Tres marcas: <b>position</b> (cursor), <b>limit</b> (hasta dónde) y <b>capacity</b> (tamaño total).</li>
+        <li><b><code>flip()</code></b>: <code>limit = position</code> y <code>position = 0</code>. Pasa de modo llenar a modo vaciar. <b>Sin flip no se escribe nada</b>.</li>
+        <li><code>write</code> puede no escribirlo todo: <code>while (buffer.hasRemaining())</code>.</li>
+        <li><code>canal.read(buf)</code> devuelve <b>-1</b> al final.</li>
+        <li><code>ByteBuffer.wrap(Files.readAllBytes(p))</code>: caja ya llena y lista para leer, sin canal ni flip.</li>
+      </ul>
+    </div>
+    <pre>try (FileChannel canal = FileChannel.open(ruta,
+        StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+    ByteBuffer b = ByteBuffer.allocate(44);
+    b.putInt(101);                               // 4 bytes
+    b.put(Arrays.copyOf("SSD 1TB".getBytes(
+            StandardCharsets.UTF_8), 40));       // 40 bytes
+    b.flip();
+    while (b.hasRemaining()) {
+        canal.write(b);
+    }
+}
+// modificar en una posición concreta
+canal.write(ByteBuffer.wrap(nuevo), n * 44L + 4);</pre>
+  </div>
+  <div class="clave"><b>Trampas:</b> <code>getShort()</code> tiene signo (<code>0xCAFE</code> sale negativo → <code>Short.toUnsignedInt</code>). Olvidar <code>flip()</code> → <code>BufferUnderflowException</code>. <code>ByteBuffer</code> no tiene <code>getUTF</code>.</div>
+  <span class="n">17</span>
+</section>
+
+<section class="s">
+  <div class="tag">12 · Excel</div>
+  <h1>Apache POI</h1>
+  <div class="g2">
+    <div>
+      <ul>
+        <li>Java no sabe crear <code>.xlsx</code> solo: se usa la <b>librería externa</b> Apache POI (<code>org.apache.poi:poi-ooxml</code>, dependencia Maven).</li>
+        <li>Jerarquía: <b><code>XSSFWorkbook</code></b> (libro) → <b><code>Sheet</code></b> (hoja) → <b><code>Row</code></b> (fila) → <b><code>Cell</code></b> (celda).</li>
+        <li>Filas y celdas se numeran <b>desde 0</b>: <code>createRow(0)</code> es la fila 1 y <code>createCell(0)</code> la columna A.</li>
+        <li>Valores: <code>setCellValue(texto o número)</code>. Guarda los números como número para que Excel opere.</li>
+        <li>Fórmulas: <code>setCellFormula("B2*C2")</code>, <b>sin el signo =</b>.</li>
+        <li>Estilo: <code>CellStyle</code> + <code>Font</code> (<code>setBold(true)</code>), creado desde el libro y aplicado con <code>setCellStyle</code>.</li>
+        <li><code>autoSizeColumn(i)</code> ajusta el ancho. <code>libro.write(out)</code> guarda.</li>
+        <li><code>HSSFWorkbook</code> es para el formato antiguo <code>.xls</code>.</li>
+      </ul>
+    </div>
+    <pre>try (XSSFWorkbook libro = new XSSFWorkbook();
+     OutputStream out = Files.newOutputStream(ruta)) {
+    Sheet hoja = libro.createSheet("Inventario");
+    Row fila = hoja.createRow(1);
+    fila.createCell(0).setCellValue("SSD 1TB");
+    fila.createCell(1).setCellValue(89.90);
+    fila.createCell(2).setCellValue(3);
+    fila.createCell(3).setCellFormula("B2*C2");
+    hoja.autoSizeColumn(0);
+    libro.write(out);
+}</pre>
+  </div>
+  <span class="n">18</span>
+</section>
+
+<section class="s">
+  <div class="tag">13 · Elegir</div>
+  <h1>¿Qué clase o formato uso?</h1>
+  <table>
+    <tr><th>Necesito…</th><th>Uso</th></tr>
+    <tr><td>Que lo lea una persona, Excel u otro lenguaje</td><td>CSV (texto)</td></tr>
+    <tr><td>Guardar y recuperar objetos Java enteros</td><td>Serialización (<code>ObjectOutputStream</code>)</td></tr>
+    <tr><td>Ir directamente a un registro o modificar uno</td><td>Acceso aleatorio (<code>RandomAccessFile</code> o <code>FileChannel</code>)</td></tr>
+    <tr><td>Datos numéricos compactos, uno detrás de otro</td><td><code>DataOutputStream</code> / <code>DataInputStream</code></td></tr>
+    <tr><td>Leer un texto entero pequeño</td><td><code>Files.readAllLines</code> / <code>readString</code></td></tr>
+    <tr><td>Procesar un texto con filter/map sin bucles</td><td><code>Files.lines</code> en try-with-resources</td></tr>
+    <tr><td>Un log que crece</td><td><code>writeString</code> con <code>CREATE, APPEND</code></td></tr>
+    <tr><td>Un fichero de configuración que no se debe machacar</td><td><code>CREATE_NEW</code> + capturar <code>FileAlreadyExistsException</code></td></tr>
+    <tr><td>Crear carpetas sin preocuparse de si existen</td><td><code>Files.createDirectories</code></td></tr>
+    <tr><td>Un informe Excel</td><td>Apache POI (<code>XSSFWorkbook</code>)</td></tr>
+  </table>
+  <span class="n">19</span>
+</section>
+
+<section class="s" style="--c:#dc2626">
+  <div class="tag">14 · Trampas de examen (1)</div>
+  <h1>Verdadero o falso</h1>
+  <table>
+    <tr><th>Afirmación</th><th></th><th>Por qué</th></tr>
+    <tr><td><code>new File("x.txt")</code> crea el fichero</td><td class="no">F</td><td>Solo la ruta; lo crea <code>createNewFile()</code></td></tr>
+    <tr><td><code>Paths.get("a")</code> lanza excepción si no existe</td><td class="no">F</td><td>No toca el disco</td></tr>
+    <tr><td><code>createDirectories</code> falla si la carpeta ya existe</td><td class="no">F</td><td>Es la que no falla; <code>createDirectory</code> sí</td></tr>
+    <tr><td><code>Files.delete</code> borra una carpeta llena</td><td class="no">F</td><td><code>DirectoryNotEmptyException</code></td></tr>
+    <tr><td>Mover y renombrar usan el mismo método</td><td class="ok">V</td><td><code>move</code> / <code>renameTo</code></td></tr>
+    <tr><td><code>writeString</code> añade un salto de línea</td><td class="no">F</td><td>Hay que sumar <code>System.lineSeparator()</code></td></tr>
+    <tr><td>Escribir sin opciones sobre un fichero existente lo vacía</td><td class="ok">V</td><td>CREATE + TRUNCATE_EXISTING</td></tr>
+    <tr><td><code>APPEND</code> crea el fichero si no existe</td><td class="no">F</td><td>Hace falta <code>CREATE</code></td></tr>
+    <tr><td><code>Files.lines</code> no hace falta cerrarlo</td><td class="no">F</td><td>Devuelve un Stream abierto: try ( )</td></tr>
+    <tr><td><code>readLine()</code> devuelve null al final</td><td class="ok">V</td><td>En BufferedReader</td></tr>
+  </table>
+  <span class="n">20</span>
+</section>
+
+<section class="s" style="--c:#dc2626">
+  <div class="tag">14 · Trampas de examen (2)</div>
+  <h1>Verdadero o falso</h1>
+  <table>
+    <tr><th>Afirmación</th><th></th><th>Por qué</th></tr>
+    <tr><td><code>readInt()</code> devuelve -1 al final del fichero</td><td class="no">F</td><td>Lanza <code>EOFException</code></td></tr>
+    <tr><td>Leer un binario en otro orden da una excepción</td><td class="no">F</td><td>Da valores sin sentido, sin error</td></tr>
+    <tr><td><code>Serializable</code> obliga a implementar métodos</td><td class="no">F</td><td>Es una interfaz marcadora</td></tr>
+    <tr><td>Los atributos <code>transient</code> se guardan</td><td class="no">F</td><td>Al leer valen null / 0 / false</td></tr>
+    <tr><td><code>readObject()</code> devuelve el tipo exacto</td><td class="no">F</td><td>Devuelve <code>Object</code>: cast</td></tr>
+    <tr><td>Un fichero serializado lo lee Python</td><td class="no">F</td><td>Solo Java</td></tr>
+    <tr><td>Acceso aleatorio necesita registros de tamaño fijo</td><td class="ok">V</td><td>posición = n × tamaño</td></tr>
+    <tr><td><code>writeChars("Hola")</code> ocupa 4 bytes</td><td class="no">F</td><td>8: 2 bytes por char</td></tr>
+    <tr><td>Sin <code>flip()</code> el canal escribe el buffer igual</td><td class="no">F</td><td>No escribe nada</td></tr>
+    <tr><td><code>String.startsWith</code> sirve contra Path Traversal</td><td class="no">F</td><td>Compara letras; usar <code>Path.startsWith</code> tras normalize</td></tr>
+    <tr><td>En POI, <code>createCell(0)</code> es la columna A</td><td class="ok">V</td><td>Todo empieza en 0</td></tr>
+  </table>
+  <span class="n">21</span>
+</section>
+
+<section class="s">
+  <div class="tag">15 · Glosario</div>
+  <h1>Vocabulario del tema</h1>
+  <div class="g2">
+    <table>
+      <tr><th>Término</th><th>Significado</th></tr>
+      <tr><td>Ruta (Path, File)</td><td>dirección de un fichero o carpeta</td></tr>
+      <tr><td>Directorio de trabajo</td><td>carpeta con la que se completan las rutas relativas</td></tr>
+      <tr><td>Búfer</td><td>memoria donde se juntan datos antes de ir al disco</td></tr>
+      <tr><td>Opción de apertura</td><td>qué hacer si el fichero existe o no</td></tr>
+      <tr><td>Atómico</td><td>en un solo paso, sin hueco</td></tr>
+      <tr><td>Persistencia</td><td>que los datos sobrevivan al programa</td></tr>
+    </table>
+    <table>
+      <tr><th>Término</th><th>Significado</th></tr>
+      <tr><td>Secuencial</td><td>leer desde el principio, en orden</td></tr>
+      <tr><td>Aleatorio / directo</td><td>saltar a cualquier posición</td></tr>
+      <tr><td>Registro</td><td>datos de un elemento dentro del fichero</td></tr>
+      <tr><td>Serializar</td><td>objeto → bytes</td></tr>
+      <tr><td>Normalizar</td><td>resolver los <code>.</code> y <code>..</code></td></tr>
+      <tr><td>EOF</td><td>End Of File: final del fichero</td></tr>
+      <tr><td>Big-endian</td><td>byte más importante primero</td></tr>
+    </table>
+  </div>
+  <div class="clave"><b>Paquetes:</b> <code>java.io</code> (File, streams, RandomAccessFile, Serializable) · <code>java.nio.file</code> (Path, Paths, Files, opciones) · <code>java.nio</code> (ByteBuffer) · <code>java.nio.channels</code> (FileChannel) · <code>java.time</code> (fechas) · <code>org.apache.poi</code> (Excel, externa).</div>
+  <span class="n">22</span>
+</section>
+
+</body>
+</html>

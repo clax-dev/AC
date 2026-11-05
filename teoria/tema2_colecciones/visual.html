@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Colecciones visual</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 9mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 6mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 6mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 12.5pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .chip { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3mm 4mm; font-size: 11pt; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 12.5pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 12.5pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 10pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+
+  .code-ok { color:#16a34a; font-weight:700 } .code-mal { color:#dc2626; font-weight:700 }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 10pt; }
+  .small { font-size: 10pt; }
+</style>
+</head>
+<body>
+<section class="page">
+  <span class="chip">TEMA 2 · MAPA</span>
+  <h1>Colecciones: un contenedor para cada uso</h1>
+  <h2>Un array tiene tamaño fijo. Las colecciones crecen solas, y cada una está pensada para una forma de usar los datos.</h2>
+  <div class="grid4">
+    <div class="card azul"><span class="ico">📏</span><b class="t">List · ArrayList</b>Fila numerada: orden, repetidos, índice.</div>
+    <div class="card amar"><span class="ico">🛒</span><b class="t">Queue · LinkedList</b>Cola del súper: FIFO.</div>
+    <div class="card verde"><span class="ico">📒</span><b class="t">Map · HashMap</b>Agenda: clave → valor.</div>
+    <div class="card nar"><span class="ico">🎟️</span><b class="t">Set · HashSet</b>Invitados: sin repetidos.</div>
+  </div>
+  <div class="grid3" style="margin-top:4mm">
+    <div class="card"><b class="t">Pág. 2</b>Las cuatro, por dentro</div>
+    <div class="card"><b class="t">Pág. 3</b>Cuál elijo: SoundWave</div>
+    <div class="card mal"><b class="t">Pág. 4</b>Las trampas</div>
+  </div>
+  <div class="frase">«Busco por ID → Map. Necesito un orden → List. Turnos → Queue. Únicos → Set.»</div>
+  <span class="tag">AC · DAM 2º · Tema 2: Colecciones</span><span class="num">1</span>
+</section>
+
+<section class="page">
+  <span class="chip">1 · LAS CUATRO COLECCIONES</span>
+  <h1>Cómo guarda cada una</h1>
+  <svg viewBox="0 0 1000 315">
+    <g font-size="14">
+      <text x="20" y="30" font-weight="700">List (ArrayList)</text>
+      <g class="mono"><rect x="20" y="40" width="70" height="40" fill="#dbeafe" stroke="#2563eb"/><text x="55" y="66" text-anchor="middle">3</text><rect x="90" y="40" width="70" height="40" fill="#dbeafe" stroke="#2563eb"/><text x="125" y="66" text-anchor="middle">1</text><rect x="160" y="40" width="70" height="40" fill="#dbeafe" stroke="#2563eb"/><text x="195" y="66" text-anchor="middle">3</text><rect x="230" y="40" width="70" height="40" fill="#dbeafe" stroke="#2563eb"/><text x="265" y="66" text-anchor="middle">7</text></g>
+      <text x="55" y="98" text-anchor="middle" font-size="12">[0]</text><text x="125" y="98" text-anchor="middle" font-size="12">[1]</text><text x="195" y="98" text-anchor="middle" font-size="12">[2]</text><text x="265" y="98" text-anchor="middle" font-size="12">[3]</text>
+      <text x="320" y="66">orden + repetidos + get(i)</text>
+
+      <text x="560" y="30" font-weight="700">Queue (LinkedList) · FIFO</text>
+      <text x="560" y="66">sale ⬅</text>
+      <g class="mono"><rect x="620" y="40" width="60" height="40" fill="#fef9c3" stroke="#ca8a04"/><text x="650" y="66" text-anchor="middle">5</text><rect x="680" y="40" width="60" height="40" fill="#fef9c3" stroke="#ca8a04"/><text x="710" y="66" text-anchor="middle">2</text><rect x="740" y="40" width="60" height="40" fill="#fef9c3" stroke="#ca8a04"/><text x="770" y="66" text-anchor="middle">9</text></g>
+      <text x="810" y="66">⬅ entra</text>
+      <text x="620" y="100" font-size="13">poll() saca el 5 · peek() lo mira</text>
+
+      <text x="20" y="160" font-weight="700">Map (HashMap) · clave → valor</text>
+      <g class="mono" font-size="13"><rect x="20" y="170" width="60" height="34" fill="#d1fae5" stroke="#059669"/><text x="50" y="192" text-anchor="middle">1</text><text x="90" y="192">→ "Song A - Artista X - pop"</text>
+      <rect x="20" y="210" width="60" height="34" fill="#d1fae5" stroke="#059669"/><text x="50" y="232" text-anchor="middle">7</text><text x="90" y="232">→ "Song B - Artista Y - rock"</text>
+      <rect x="20" y="250" width="60" height="34" fill="#d1fae5" stroke="#059669"/><text x="50" y="272" text-anchor="middle">300</text><text x="90" y="272">→ "Song C - Artista X - pop"</text></g>
+      <text x="20" y="306" font-size="13">claves únicas · size() = 3, pero las claves son 1, 7 y 300</text>
+
+      <text x="560" y="160" font-weight="700">Set (HashSet) · sin repetidos</text>
+      <ellipse cx="760" cy="230" rx="180" ry="55" fill="#ffedd5" stroke="#ea580c"/>
+      <text x="700" y="225" text-anchor="middle" class="mono">"Artista X"</text><text x="820" y="245" text-anchor="middle" class="mono">"Artista Y"</text>
+      <text x="760" y="300" text-anchor="middle" font-size="12">add("Artista X") otra vez → false, no se repite</text>
+    </g>
+  </svg>
+  <div class="frase">Declara con la <b>interfaz</b> y crea con la <b>clase</b>: <span class="mono">List&lt;Integer&gt; orden = new ArrayList&lt;&gt;();</span></div>
+  <span class="num">2</span>
+</section>
+
+<section class="page">
+  <span class="chip">2 · CUÁL ELIJO</span>
+  <h1>SoundWave: las cuatro en un ejercicio</h1>
+  <table>
+    <tr><th>Operación del enunciado</th><th>Colección</th><th>Métodos</th></tr>
+    <tr><td>Buscar una canción por su ID</td><td><b>HashMap&lt;Integer,String&gt;</b></td><td class="mono">containsKey · get · getOrDefault</td></tr>
+    <tr><td>Mostrar en el orden de la playlist</td><td><b>ArrayList&lt;Integer&gt;</b></td><td class="mono">add · for · get(i)</td></tr>
+    <tr><td>Cola de reproducción</td><td><b>LinkedList como Queue</b></td><td class="mono">offer · poll · peek</td></tr>
+    <tr><td>Contar reproducciones</td><td><b>HashMap&lt;Integer,Integer&gt;</b></td><td class="mono">merge(id, 1, Integer::sum)</td></tr>
+    <tr><td>Artistas únicos</td><td><b>HashSet&lt;String&gt;</b></td><td class="mono">add(c.split(" - ")[1])</td></tr>
+    <tr><td>La más reproducida</td><td>recorrer el Map</td><td class="mono">entrySet · getKey · getValue</td></tr>
+  </table>
+  <pre style="margin-top:4mm">reproducciones.merge(id, 1, Integer::sum);                       <span class="c">// contar</span>
+<span class="k">for</span> (Map.Entry&lt;Integer,Integer&gt; e : reproducciones.entrySet()) { e.getKey(); e.getValue(); }
+canciones.forEach((id, c) -&gt; System.out.println(id + <span class="g">" -&gt; "</span> + c));</pre>
+  <span class="num">3</span>
+</section>
+
+<section class="page">
+  <span class="chip">3 · LAS TRAMPAS</span>
+  <h1>Lo que suele fallar</h1>
+  <div class="grid2">
+    <div class="card mal"><b class="t">Los IDs no son índices</b><span class="code-mal">✗</span> <span class="mono">if (id &gt;= canciones.size())</span><br><span class="code-ok">✓</span> <span class="mono">if (!canciones.containsKey(id))</span><br>Te pasó en <span class="mono">buscarCancion</span>.</div>
+    <div class="card mal"><b class="t">List.of es inmutable</b><span class="mono">List.of("a").add("b")</span> → <span class="mono">UnsupportedOperationException</span><br><span class="code-ok">✓</span> <span class="mono">new ArrayList&lt;&gt;(List.of(...))</span></div>
+    <div class="card amar"><b class="t">Cola vacía</b><span class="mono">poll()</span> → null · <span class="mono">remove()</span> → excepción · <span class="mono">peek()</span> → null (mira sin sacar)</div>
+    <div class="card amar"><b class="t">get de una clave que no existe</b>Devuelve <span class="mono">null</span>. Con <span class="mono">getOrDefault(k, d)</span> eliges qué devolver.</div>
+    <div class="card azul"><b class="t">Sin orden</b><span class="mono">HashMap</span> y <span class="mono">HashSet</span> no guardan orden. Orden de inserción: <span class="mono">LinkedHashMap</span>. Ordenado: <span class="mono">TreeMap</span> / <span class="mono">TreeSet</span>.</div>
+    <div class="card"><b class="t">No son seguras para hilos</b>En PSP: <span class="mono">ConcurrentLinkedQueue</span>, <span class="mono">ConcurrentHashMap</span>.</div>
+  </div>
+  <div class="frase">«Los IDs de un Map no son posiciones; List.of no se puede modificar; poll te avisa con null.»</div>
+  <span class="num">4</span>
+</section>
+
+</body>
+</html>

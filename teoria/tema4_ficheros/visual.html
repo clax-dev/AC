@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ficheros visual</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root {
+    --azul: #2563eb; --azul-claro: #dbeafe; --nar: #ea580c; --nar-claro: #ffedd5;
+    --ok: #16a34a; --ok-claro: #dcfce7; --mal: #dc2626; --mal-claro: #fee2e2;
+    --verde: #059669; --verde-claro: #d1fae5; --amar: #ca8a04; --amar-claro: #fef9c3;
+    --tinta: #1e293b; --suave: #64748b; --linea: #cbd5e1; --fondo: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  .page { width: 297mm; height: 210mm; padding: 11mm 14mm 9mm; position: relative; page-break-after: always;
+          overflow: hidden; display: flex; flex-direction: column; }
+  .page:last-child { page-break-after: auto; }
+  .num { position: absolute; right: 14mm; bottom: 6mm; color: var(--suave); font-size: 10pt; }
+  .tag { position: absolute; left: 14mm; bottom: 6mm; color: var(--suave); font-size: 9pt; }
+  h1 { font-size: 23pt; margin: 0 0 2mm; }
+  h2 { font-size: 12.5pt; margin: 0 0 3mm; color: var(--suave); font-weight: 500; }
+  h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .chip { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1mm 3mm; border-radius: 99px;
+          margin-bottom: 2mm; background: var(--azul-claro); color: var(--azul); letter-spacing: .4px; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--tinta); }
+  .mono, svg .mono { font-family: Consolas, "Cascadia Mono", monospace; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .card { border: 1.5px solid var(--linea); border-radius: 3.5mm; padding: 3mm 4mm; font-size: 11pt; }
+  .card .ico { font-size: 20pt; display: block; }
+  .card b.t { display: block; font-size: 12.5pt; margin: 1mm 0; }
+  .azul { border-color: var(--azul); background: var(--azul-claro); }
+  .nar { border-color: var(--nar); background: var(--nar-claro); }
+  .ok { border-color: var(--ok); background: var(--ok-claro); }
+  .mal { border-color: var(--mal); background: var(--mal-claro); }
+  .verde { border-color: var(--verde); background: var(--verde-claro); }
+  .amar { border-color: var(--amar); background: var(--amar-claro); }
+  .frase { margin-top: auto; border-left: 5px solid var(--azul); background: #f1f5f9; padding: 3mm 5mm;
+           font-size: 12.5pt; border-radius: 0 3mm 3mm 0; }
+  pre { font-family: Consolas, monospace; font-size: 10pt; background: #0f172a; color: #e2e8f0; padding: 3mm 4mm;
+        border-radius: 3mm; margin: 0; line-height: 1.45; }
+  pre .c { color: #94a3b8; } pre .k { color: #f472b6; } pre .m { color: #fca5a5; } pre .g { color: #86efac; }
+  table { border-collapse: collapse; width: 100%; font-size: 11pt; }
+  th, td { border: 1px solid var(--linea); padding: 2mm 3mm; text-align: left; }
+  th { background: #f1f5f9; }
+
+  .code-ok { color:#16a34a; font-weight:700 } .code-mal { color:#dc2626; font-weight:700 }
+  td.mono, th.mono { font-family: Consolas, monospace; font-size: 10pt; }
+  .small { font-size: 10pt; }
+</style>
+</head>
+<body>
+<!-- 1 MAPA -->
+<section class="page">
+  <span class="chip">TEMA 4 · MAPA</span>
+  <h1>Ficheros: que los datos sobrevivan al programa</h1>
+  <h2>La RAM se borra al cerrar. El disco se acuerda. Aprendes a encontrar un fichero, a leerlo y escribirlo, y a guardar objetos.</h2>
+  <div class="grid4">
+    <div class="card azul"><span class="ico">✉️</span><b class="t">Ruta ≠ fichero</b>«Escribir la dirección no construye la casa.»<br><small>pág. 3 · F01</small></div>
+    <div class="card"><span class="ico">🧰</span><b class="t">File vs Files</b>«false sin explicación / excepción concreta.»<br><small>pág. 4</small></div>
+    <div class="card verde"><span class="ico">📦</span><b class="t">Crear, mover, borrar</b>«Destino con nombre · carpeta solo vacía.»<br><small>pág. 5 · ejercicio.java</small></div>
+    <div class="card amar"><span class="ico">🚰</span><b class="t">Abrir · usar · cerrar</b>«Lo que se abre va en try ( ).»<br><small>pág. 6 · F02</small></div>
+    <div class="card nar"><span class="ico">✍️</span><b class="t">Opciones de apertura</b>«Machaca · se niega · añade.»<br><small>pág. 7 · Laboratorio · BioDAM</small></div>
+    <div class="card mal"><span class="ico">🛡️</span><b class="t">Path Traversal</b>«Normaliza y compara carpeta a carpeta.»<br><small>pág. 8 · BioDAM</small></div>
+    <div class="card azul"><span class="ico">💾</span><b class="t">4 formatos</b>«CSV · Data · Serializable · aleatorio.»<br><small>pág. 9 · F03–F06</small></div>
+    <div class="card verde"><span class="ico">🪣</span><b class="t">Binario y ByteBuffer</b>«Llenar → flip() → vaciar.»<br><small>pág. 10 · MapaBinario</small></div>
+  </div>
+  <div class="frase">Las dos ideas que lo sostienen todo: <b>una ruta es solo una dirección</b> y <b>lo que se abre, se cierra</b> (con <span class="mono">try ( )</span>). Excel con POI, en la pág. 11.</div>
+  <span class="tag">AC · DAM 2º · Tema 4: Ficheros</span><span class="num">1</span>
+</section>
+
+<!-- 2 TEXTO/BINARIO -->
+<section class="page">
+  <span class="chip">1 · RAM, DISCO, TEXTO Y BINARIO</span>
+  <h1>Todo son bytes: cambia cómo se leen</h1>
+  <svg viewBox="0 0 1000 300">
+    <rect x="20" y="20" width="280" height="120" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="160" y="55" text-anchor="middle" font-size="18" font-weight="700">🧠 RAM (variables)</text>
+    <text x="160" y="85" text-anchor="middle" font-size="14">rápida pero se BORRA</text>
+    <text x="160" y="110" text-anchor="middle" font-size="14">al cerrar el programa</text>
+    <rect x="20" y="160" width="280" height="120" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="160" y="195" text-anchor="middle" font-size="18" font-weight="700">💽 Disco (ficheros)</text>
+    <text x="160" y="225" text-anchor="middle" font-size="14">se QUEDA aunque apagues</text>
+    <text x="160" y="250" text-anchor="middle" font-size="14">= «Acceso a Datos»</text>
+    <path d="M160 140 L160 160" stroke="#334155" stroke-width="3" marker-end="url(#f)"/>
+    <defs><marker id="f" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <text x="350" y="40" font-size="16" font-weight="700">El número 2000000 guardado de dos formas:</text>
+    <text x="350" y="80" font-size="15">📄 TEXTO: 7 caracteres →</text>
+    <g class="mono" font-size="16">
+      <rect x="560" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="580" y="82" text-anchor="middle">2</text>
+      <rect x="600" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="620" y="82" text-anchor="middle">0</text>
+      <rect x="640" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="660" y="82" text-anchor="middle">0</text>
+      <rect x="680" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="700" y="82" text-anchor="middle">0</text>
+      <rect x="720" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="740" y="82" text-anchor="middle">0</text>
+      <rect x="760" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="780" y="82" text-anchor="middle">0</text>
+      <rect x="800" y="60" width="40" height="32" fill="#dbeafe" stroke="#2563eb"/><text x="820" y="82" text-anchor="middle">0</text>
+    </g>
+    <text x="350" y="140" font-size="15">💾 BINARIO (int): 4 bytes →</text>
+    <g class="mono" font-size="16">
+      <rect x="560" y="120" width="50" height="32" fill="#ffedd5" stroke="#ea580c"/><text x="585" y="142" text-anchor="middle">00</text>
+      <rect x="610" y="120" width="50" height="32" fill="#ffedd5" stroke="#ea580c"/><text x="635" y="142" text-anchor="middle">1E</text>
+      <rect x="660" y="120" width="50" height="32" fill="#ffedd5" stroke="#ea580c"/><text x="685" y="142" text-anchor="middle">84</text>
+      <rect x="710" y="120" width="50" height="32" fill="#ffedd5" stroke="#ea580c"/><text x="735" y="142" text-anchor="middle">80</text>
+    </g>
+    <text x="350" y="200" font-size="14" style="fill:#64748b">Un int ocupa SIEMPRE 4 bytes, valga 7 o 2 000 000 → el binario ocupa menos y es más rápido,</text>
+    <text x="350" y="222" font-size="14" style="fill:#64748b">pero en el Bloc de notas solo se ven símbolos raros.</text>
+  </svg>
+  <div class="grid2">
+    <div class="card azul"><b class="t">📄 Texto = letras</b>Se lee con el Bloc de notas.<br><span class="mono">.txt .csv .log .properties</span><br>Clases: <span class="mono">BufferedReader/Writer</span>, <span class="mono">Files.readAllLines</span>… · Codificación <b>UTF-8</b></div>
+    <div class="card nar"><b class="t">💾 Binario = datos en bruto</b>Solo lo entiende un programa.<br><span class="mono">.dat .bin .ser .jpg .xlsx</span><br>Clases: <span class="mono">Data*Stream</span>, <span class="mono">Object*Stream</span>, <span class="mono">RandomAccessFile</span>, <span class="mono">ByteBuffer</span></div>
+  </div>
+  <div class="frase">«La RAM se olvida al cerrar; el disco se acuerda.» Una <b>carpeta</b> no guarda datos: solo agrupa.</div>
+  <span class="num">2</span>
+</section>
+
+<!-- 3 RUTA -->
+<section class="page">
+  <span class="chip">2 · UNA RUTA NO ES EL FICHERO</span>
+  <h1>Escribir la dirección no construye la casa</h1>
+  <svg viewBox="0 0 1000 250">
+    <rect x="20" y="30" width="420" height="190" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="230" y="62" text-anchor="middle" font-size="17" font-weight="700">1️⃣ Escribir la dirección (Path)</text>
+    <text x="230" y="95" text-anchor="middle" font-size="14" class="mono">Path p = Paths.get("salida","config");</text>
+    <text x="230" y="145" text-anchor="middle" font-size="32">✉️</text>
+    <text x="230" y="170" text-anchor="middle" font-size="14">NO toca el disco · NO falla aunque no exista</text>
+    <text x="230" y="195" text-anchor="middle" font-size="14">resolve · normalize · toAbsolutePath</text>
+    <path d="M450 125 L540 125" stroke="#334155" stroke-width="3" marker-end="url(#f3)"/>
+    <defs><marker id="f3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="560" y="30" width="420" height="190" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="770" y="62" text-anchor="middle" font-size="17" font-weight="700">2️⃣ Hacer algo con ella (Files)</text>
+    <text x="770" y="95" text-anchor="middle" font-size="14" class="mono">Files.createDirectories(p);</text>
+    <text x="770" y="145" text-anchor="middle" font-size="32">🏠</text>
+    <text x="770" y="170" text-anchor="middle" font-size="14">SÍ toca el disco · SÍ puede fallar</text>
+    <text x="770" y="195" text-anchor="middle" font-size="14">(lanza IOException)</text>
+  </svg>
+  <div class="grid3">
+    <div class="card"><b class="t">Absoluta</b>Desde la unidad:<br><span class="mono">C:/DAM/Segundo/AC/datos/mapa.dat</span><br>Siempre el mismo sitio.</div>
+    <div class="card amar"><b class="t">Relativa</b><span class="mono">"datos/mapa.dat"</span> se completa con el <b>directorio de trabajo</b> (<span class="mono">C:\DAM\Segundo\AC</span>).<br>¿No lo encuentra? → <span class="mono">toAbsolutePath()</span></div>
+    <div class="card mal"><b class="t">Path es inmutable</b><span class="code-mal">✗</span> <span class="mono">ruta.resolve(nombre);</span><br><span class="code-ok">✓</span> <span class="mono">Path f = ruta.resolve(nombre);</span><br>Una variable por cosa: <span class="mono">carpetaLogs</span> ≠ <span class="mono">archivoLog</span>.</div>
+  </div>
+  <div class="frase">Trampa: <span class="mono">carpeta.resolve(rutaAbsoluta)</span> ignora la carpeta. Para meter un fichero en otra: <span class="mono">carpeta.resolve(ruta.getFileName())</span>.</div>
+  <span class="num">3</span>
+</section>
+
+<!-- 4 FILE VS FILES -->
+<section class="page">
+  <span class="chip">3 · DOS CAJAS DE HERRAMIENTAS</span>
+  <h1>File (antigua) frente a Path + Files (moderna)</h1>
+  <table>
+    <tr><th></th><th>java.io.File · Java 1</th><th>java.nio.file · Java 7+</th></tr>
+    <tr><td><b>La dirección</b></td><td>un objeto <span class="mono">File</span></td><td>un objeto <span class="mono">Path</span></td></tr>
+    <tr><td><b>Las acciones</b></td><td>métodos del objeto: <span class="mono">f.mkdir()</span></td><td>métodos <b>static</b> de <span class="mono">Files</span>: <span class="mono">Files.createDirectory(p)</span></td></tr>
+    <tr><td><b>Si falla</b></td><td class="code-mal">devuelve false, sin decir por qué</td><td class="code-ok">lanza una excepción concreta</td></tr>
+    <tr><td>Crear carpeta / anidadas</td><td class="mono">mkdir() / mkdirs()</td><td class="mono">createDirectory / createDirectories ⭐</td></tr>
+    <tr><td>Crear fichero vacío</td><td class="mono">createNewFile()</td><td class="mono">createFile(p)</td></tr>
+    <tr><td>Mover / renombrar</td><td class="mono">renameTo(destino)</td><td class="mono">move(origen, destino)</td></tr>
+    <tr><td>Borrar</td><td class="mono">delete()</td><td class="mono">delete(p) / deleteIfExists(p)</td></tr>
+    <tr><td>¿Existe? · tamaño</td><td class="mono">exists() · length() (0 si no existe)</td><td class="mono">exists(p) · size(p)</td></tr>
+    <tr><td>Contenido de carpeta</td><td class="mono">listFiles() → File[]</td><td class="mono">list(p) → Stream&lt;Path&gt; (try)</td></tr>
+    <tr><td>Una dentro de otra</td><td class="mono">new File(carpeta, "x")</td><td class="mono">carpeta.resolve("x")</td></tr>
+    <tr><td>Convertir</td><td class="mono">f.toPath()</td><td class="mono">p.toFile()</td></tr>
+  </table>
+  <div class="frase">Truco para leer código: <b>File</b> + métodos sobre el objeto = antigua. <b>Files.</b> con <b>s</b> = moderna. <span class="mono">mkdir()</span> → false puede ser «ya existía», «sin permiso» o «no existe el padre».</div>
+  <span class="num">4</span>
+</section>
+
+<!-- 5 OPERACIONES -->
+<section class="page">
+  <span class="chip">4 · CREAR, MOVER, BORRAR, LISTAR</span>
+  <h1>Ficheros y carpetas como cajas cerradas</h1>
+  <svg viewBox="0 0 1000 230">
+    <text x="20" y="28" font-size="16" font-weight="700">Mover = cambiar la dirección (y renombrar es lo mismo)</text>
+    <rect x="20" y="45" width="300" height="70" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="170" y="75" text-anchor="middle" font-size="14" class="mono">AC/carpeta</text>
+    <text x="170" y="100" text-anchor="middle" font-size="13">DESDE (origen)</text>
+    <path d="M330 80 L420 80" stroke="#334155" stroke-width="3" marker-end="url(#f5)"/>
+    <defs><marker id="f5" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="430" y="45" width="320" height="70" rx="10" fill="#dcfce7" stroke="#16a34a"/>
+    <text x="590" y="75" text-anchor="middle" font-size="14" class="mono">AC/ejercicios/carpeta</text>
+    <text x="590" y="100" text-anchor="middle" font-size="13">HASTA: con el nombre final ✓</text>
+    <rect x="770" y="45" width="210" height="70" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="875" y="75" text-anchor="middle" font-size="14" class="mono">AC/ejercicios</text>
+    <text x="875" y="100" text-anchor="middle" font-size="13">solo la carpeta ✗</text>
+    <text x="20" y="150" font-size="14">• <tspan class="mono">Files.move(DESDE, HASTA, REPLACE_EXISTING)</tspan> — al revés falla (te pasó en BioDAM).</text>
+    <text x="20" y="175" font-size="14">• La carpeta de destino tiene que EXISTIR: mover no construye el camino.</text>
+    <text x="20" y="200" font-size="14">• En el mismo disco es instantáneo: no copia datos, solo cambia la dirección.</text>
+  </svg>
+  <div class="grid3">
+    <div class="card verde"><b class="t">Crear</b><span class="mono">createDirectory</span>: una; necesita el padre.<br><span class="mono">createDirectories</span> ⭐: toda la cadena; <b>no falla</b> si ya existe.</div>
+    <div class="card mal"><b class="t">Borrar</b>Una carpeta <b>solo vacía</b>.<br>Si no: <span class="mono">DirectoryNotEmptyException</span> (o <span class="mono">false</span> con File).</div>
+    <div class="card azul"><b class="t">Listar con recursividad</b><span class="mono">listFiles()</span> = solo el 1.er nivel.<br>Si es carpeta → <span class="mono">Listar(h, nivel + 1)</span>.<br>Caso base: no hay subcarpetas.</div>
+  </div>
+  <pre style="margin-top:3mm"><span class="c">// ejercicio.java</span>
+<span class="k">for</span> (File archivo : f.listFiles()) {
+    <span class="k">if</span> (archivo.isDirectory()) { System.out.println(sangria + <span class="g">"[DIR]"</span> + archivo.getName()); <span class="m">Listar(archivo, nivel + 1);</span> }
+    <span class="k">else</span> System.out.println(sangria + <span class="g">"[FILE]"</span> + archivo.getName());
+}</pre>
+  <span class="num">5</span>
+</section>
+
+<!-- 6 CICLO -->
+<section class="page">
+  <span class="chip">5 · ABRIR, USAR Y CERRAR</span>
+  <h1>Como un grifo: lo que se abre, se cierra</h1>
+  <svg viewBox="0 0 1000 200">
+    <rect x="20" y="30" width="200" height="80" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="120" y="65" text-anchor="middle" font-size="17" font-weight="700">1. Abrir</text><text x="120" y="90" text-anchor="middle" font-size="13">qué fichero y para qué</text>
+    <rect x="270" y="30" width="200" height="80" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="370" y="65" text-anchor="middle" font-size="17" font-weight="700">2. Usar</text><text x="370" y="90" text-anchor="middle" font-size="13">leer o escribir</text>
+    <rect x="520" y="30" width="200" height="80" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="620" y="65" text-anchor="middle" font-size="17" font-weight="700">3. Cerrar</text><text x="620" y="90" text-anchor="middle" font-size="13">vacía el búfer al disco</text>
+    <path d="M222 70 L266 70" stroke="#334155" stroke-width="3" marker-end="url(#f6)"/><path d="M472 70 L516 70" stroke="#334155" stroke-width="3" marker-end="url(#f6)"/>
+    <defs><marker id="f6" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="760" y="20" width="220" height="170" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="870" y="50" text-anchor="middle" font-size="15" font-weight="700">Si NO cierras…</text>
+    <text x="870" y="80" text-anchor="middle" font-size="13">✍️ lo último se queda</text>
+    <text x="870" y="100" text-anchor="middle" font-size="13">en el búfer: no llega</text>
+    <text x="870" y="120" text-anchor="middle" font-size="13">al disco</text>
+    <text x="870" y="150" text-anchor="middle" font-size="13">🔒 Windows lo deja</text>
+    <text x="870" y="170" text-anchor="middle" font-size="13">bloqueado (no se mueve)</text>
+    <text x="20" y="150" font-size="14">try-with-resources: se abre en los ( ) del try y se cierra SOLO al salir, haya error o no.</text>
+  </svg>
+  <div class="grid2">
+    <pre><span class="k">try</span> (Stream&lt;String&gt; lineas = Files.lines(p)) {   <span class="c">// 1</span>
+    lineas.forEach(System.out::println);          <span class="c">// 2</span>
+}                                                 <span class="c">// 3 solo</span>
+
+<span class="k">try</span> (BufferedReader br = Files.newBufferedReader(p)) {
+    String l;
+    <span class="k">while</span> ((l = br.readLine()) != <span class="k">null</span>) { ... }  <span class="c">// null = fin</span>
+}</pre>
+    <table class="small">
+      <tr><th>Leer</th><th>Devuelve</th><th>¿try ( )?</th></tr>
+      <tr><td class="mono">readAllLines(p)</td><td>List&lt;String&gt;</td><td>No</td></tr>
+      <tr><td class="mono">readString(p)</td><td>String</td><td>No</td></tr>
+      <tr><td class="mono">lines(p)</td><td>Stream&lt;String&gt;</td><td class="code-mal">Sí</td></tr>
+      <tr><td class="mono">list(p)</td><td>Stream&lt;Path&gt;</td><td class="code-mal">Sí</td></tr>
+      <tr><td class="mono">newBufferedReader</td><td>readLine → null</td><td class="code-mal">Sí</td></tr>
+      <tr><th>Escribir</th><th>Recibe</th><th></th></tr>
+      <tr><td class="mono">write(p, lista)</td><td>una línea por elemento</td><td>No</td></tr>
+      <tr><td class="mono">writeString(p, t)</td><td>String, <b>sin \n</b></td><td>No</td></tr>
+    </table>
+  </div>
+  <div class="frase">Usa siempre <b>UTF-8</b>: si escribes con una codificación y lees con otra, la ñ sale como <span class="mono">Ã±</span>. Un stream solo se recorre <b>una vez</b>.</div>
+  <span class="num">6</span>
+</section>
+
+<!-- 7 OPCIONES + EXCEPCIONES -->
+<section class="page">
+  <span class="chip">6-7 · OPCIONES DE APERTURA Y EXCEPCIONES</span>
+  <h1>¿Y si el fichero ya existe?</h1>
+  <div class="grid3">
+    <div class="card mal"><b class="t">(ninguna)</b>No existe → lo crea.<br>Existe → <b>lo vacía</b> y escribe de cero.<br><small>Datos que se regeneran</small></div>
+    <div class="card amar"><b class="t">CREATE_NEW</b>No existe → lo crea.<br>Existe → <b>se niega</b>: <span class="mono">FileAlreadyExistsException</span>.<br><small>Configuración (Laboratorio B1)</small></div>
+    <div class="card ok"><b class="t">CREATE + APPEND</b>No existe → lo crea.<br>Existe → <b>añade al final</b>.<br><small>Logs (Laboratorio B2, BioDAM)</small></div>
+  </div>
+  <div class="grid2" style="margin-top:3mm">
+    <div class="card azul"><b class="t">¿Por qué no «if (!exists) write»?</b>Entre <b>comprobar</b> y <b>escribir</b> hay un hueco: otro puede crearlo y lo machacas. <span class="mono">CREATE_NEW</span> lo hace en <b>un paso (atómico)</b>. Es el «comprobar y luego actuar» de PSP.<br><br><span class="mono">APPEND</span> solo falla si no existe → por eso va con <span class="mono">CREATE</span>.</div>
+    <table class="small">
+      <tr><th>Excepción (hija de IOException, checked)</th><th>Cuándo</th></tr>
+      <tr><td class="mono">NoSuchFileException</td><td>no existe</td></tr>
+      <tr><td class="mono">FileAlreadyExistsException</td><td>ya existe</td></tr>
+      <tr><td class="mono">DirectoryNotEmptyException</td><td>borrar carpeta llena</td></tr>
+      <tr><td class="mono">AccessDeniedException</td><td>sin permiso</td></tr>
+      <tr><td class="mono">EOFException</td><td>fin de un binario</td></tr>
+      <tr><td class="mono">NotSerializableException</td><td>clase sin Serializable</td></tr>
+    </table>
+  </div>
+  <pre style="margin-top:3mm"><span class="k">try</span> { Files.write(config, propiedades, StandardOpenOption.<span class="m">CREATE_NEW</span>); }
+<span class="k">catch</span> (<span class="m">FileAlreadyExistsException</span> e) { System.out.println(<span class="g">"Ya existía: no lo toco"</span>); }   <span class="c">// la CONCRETA, no IOException</span>
+Files.writeString(log, linea + System.lineSeparator(), StandardOpenOption.<span class="m">CREATE</span>, StandardOpenOption.<span class="m">APPEND</span>);</pre>
+  <span class="num">7</span>
+</section>
+
+<!-- 8 PATH TRAVERSAL -->
+<section class="page">
+  <span class="chip">8 · SEGURIDAD</span>
+  <h1>Path Traversal: «..» sube una carpeta</h1>
+  <svg viewBox="0 0 1000 240">
+    <rect x="380" y="10" width="240" height="40" rx="8" fill="#f1f5f9" stroke="#64748b"/><text x="500" y="36" text-anchor="middle" font-size="15" class="mono">C:/ (raíz)</text>
+    <rect x="160" y="90" width="200" height="40" rx="8" fill="#f1f5f9" stroke="#64748b"/><text x="260" y="116" text-anchor="middle" font-size="15" class="mono">etc/passwd 🔥</text>
+    <rect x="640" y="90" width="200" height="40" rx="8" fill="#f1f5f9" stroke="#64748b"/><text x="740" y="116" text-anchor="middle" font-size="15" class="mono">AC/</text>
+    <rect x="640" y="170" width="200" height="40" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="740" y="196" text-anchor="middle" font-size="15" class="mono">datos/ (permitida)</text>
+    <line x1="500" y1="50" x2="260" y2="90" stroke="#64748b" stroke-width="2"/><line x1="500" y1="50" x2="740" y2="90" stroke="#64748b" stroke-width="2"/><line x1="740" y1="130" x2="740" y2="170" stroke="#64748b" stroke-width="2"/>
+    <path d="M845 190 C 960 160, 960 60, 625 30" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#f8)"/>
+    <path d="M380 35 C 300 40, 280 60, 270 86" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#f8)"/>
+    <defs><marker id="f8" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+    <text x="20" y="180" font-size="15" font-weight="700" style="fill:#dc2626">datos/../../etc/passwd</text>
+    <text x="20" y="205" font-size="13">EMPIEZA por «datos»… pero sube</text>
+    <text x="20" y="225" font-size="13">dos niveles y sale fuera.</text>
+  </svg>
+  <div class="grid2">
+    <pre><span class="c">// 1. absoluta y LUEGO normalize, en las DOS</span>
+Path base = Paths.get(<span class="g">"datos"</span>).toAbsolutePath().normalize();
+Path cand = Paths.get(ruta).toAbsolutePath().normalize();
+<span class="c">// 2. Path.startsWith: carpeta a carpeta</span>
+<span class="k">if</span> (!cand.startsWith(base)) {
+    <span class="k">throw new</span> SecurityException(<span class="g">"Fuera de datos/: "</span> + ruta);
+}</pre>
+    <table class="small">
+      <tr><th>Ruta del usuario</th><th>Resultado</th></tr>
+      <tr><td class="mono">datos/diagnosticos.csv</td><td class="code-ok">dentro</td></tr>
+      <tr><td class="mono">datos/../../etc/passwd</td><td class="code-mal">se sale</td></tr>
+      <tr><td class="mono">datos/essd/ppp</td><td class="code-ok">dentro (aunque no exista)</td></tr>
+      <tr><td class="mono">datos2/secreto.txt</td><td><span class="code-mal">Path: fuera ✓</span><br><span class="code-mal">String.startsWith: ¡se cuela!</span></td></tr>
+    </table>
+  </div>
+  <div class="frase">«Normaliza las dos rutas y compara <b>carpeta a carpeta</b> (<span class="mono">Path.startsWith</span>), nunca letra a letra (<span class="mono">String.startsWith</span>).»</div>
+  <span class="num">8</span>
+</section>
+
+<!-- 9 FORMATOS -->
+<section class="page">
+  <span class="chip">9 · GUARDAR OBJETOS</span>
+  <h1>Cuatro formatos, cuatro usos</h1>
+  <div class="grid2">
+    <div class="card azul"><b class="t">📄 CSV (F03)</b><span class="mono">codigo;nombre;precio</span> + una línea por objeto.<br>Guardar: <span class="mono">String.join(";", …)</span> · Cargar: <span class="mono">skip(1)</span> + <span class="mono">split(";")</span> + <span class="mono">parseInt/parseDouble</span>.<br>✅ lo abre Excel y cualquier lenguaje · ⚠ decimales con punto (<span class="mono">Locale.ROOT</span>)</div>
+    <div class="card nar"><b class="t">🔢 DataOutput/InputStream (F04)</b><span class="mono">writeUTF · writeDouble · writeInt</span><br><b>Mismo orden y mismos tipos</b> al leer, o basura sin error.<br>Fin del fichero → <span class="mono">EOFException</span> (no null).</div>
+    <div class="card verde"><b class="t">📦 Serialización (F05)</b><span class="mono">ObjectOutputStream.writeObject(lista)</span> · <span class="mono">(Cast) readObject()</span><br><span class="mono">implements Serializable</span> (marca) · <span class="mono">serialVersionUID</span> (versión → <span class="mono">InvalidClassException</span>) · <span class="mono">transient</span> = no se guarda (null/0/false).<br>⚠ solo lo entiende Java</div>
+    <div class="card amar"><b class="t">🎯 Acceso aleatorio (F06)</b><span class="mono">RandomAccessFile(f, "rw")</span> + <span class="mono">seek(n × TAM)</span><br>Registros de <b>tamaño fijo</b> (textos rellenos de espacios).<br>✅ leer o cambiar <b>un</b> registro sin tocar el resto.</div>
+  </div>
+  <table style="margin-top:3mm">
+    <tr><th>Necesito…</th><th>Formato</th></tr>
+    <tr><td>Que lo lea una persona, Excel u otro programa</td><td><b>CSV</b></td></tr>
+    <tr><td>Guardar y recuperar objetos Java rápido</td><td><b>Serialización</b></td></tr>
+    <tr><td>Muchos registros e ir directo a uno, o modificarlo</td><td><b>Acceso aleatorio</b></td></tr>
+    <tr><td>Datos numéricos compactos</td><td><b>Binario (Data*Stream)</b></td></tr>
+  </table>
+  <span class="num">9</span>
+</section>
+
+<!-- 10 BINARIO + BYTEBUFFER -->
+<section class="page">
+  <span class="chip">10-11 · BINARIO POR DENTRO Y BYTEBUFFER</span>
+  <h1>Una fila de bytes sin etiquetas</h1>
+  <svg viewBox="0 0 1000 290">
+    <text x="20" y="22" font-size="14" font-weight="700">Registro de 56 bytes (F06): posición del registro n = n × 56</text>
+    <g font-size="13">
+      <rect x="20" y="35" width="70" height="40" fill="#dbeafe" stroke="#2563eb"/><text x="55" y="60" text-anchor="middle">id 4</text>
+      <rect x="90" y="35" width="400" height="40" fill="#ffedd5" stroke="#ea580c"/><text x="290" y="60" text-anchor="middle">nombre: 20 chars × 2 = 40 (relleno de espacios)</text>
+      <rect x="490" y="35" width="110" height="40" fill="#d1fae5" stroke="#059669"/><text x="545" y="60" text-anchor="middle">precio 8</text>
+      <rect x="600" y="35" width="70" height="40" fill="#fef9c3" stroke="#ca8a04"/><text x="635" y="60" text-anchor="middle">stock 4</text>
+      <text x="20" y="95" class="mono">0</text><text x="85" y="95" class="mono">4</text><text x="480" y="95" class="mono">44</text><text x="590" y="95" class="mono">52</text><text x="660" y="95" class="mono">56</text>
+      <text x="700" y="55">seek(1×56 + 4 + 40 + 8)</text><text x="700" y="75">→ solo el stock del registro 1</text>
+    </g>
+    <text x="20" y="135" font-size="14" font-weight="700">ByteBuffer: el cubo · FileChannel: la tubería</text>
+    <g font-size="12" class="mono">
+      <rect x="20" y="150" width="280" height="36" fill="#f1f5f9" stroke="#64748b"/><text x="160" y="173" text-anchor="middle">allocate(44): vacía · position=0</text>
+      <rect x="20" y="200" width="70" height="36" fill="#dbeafe" stroke="#2563eb"/><text x="55" y="223" text-anchor="middle">101</text>
+      <rect x="90" y="200" width="210" height="36" fill="#ffedd5" stroke="#ea580c"/><text x="195" y="223" text-anchor="middle">"SSD 1TB" + relleno</text>
+      <text x="310" y="223" style="fill:#dc2626">◀ position al FINAL</text>
+    </g>
+    <rect x="480" y="150" width="200" height="86" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+    <text x="580" y="182" text-anchor="middle" font-size="18" font-weight="700">flip()</text>
+    <text x="580" y="205" text-anchor="middle" font-size="12">limit = position</text>
+    <text x="580" y="224" text-anchor="middle" font-size="12">position = 0</text>
+    <path d="M685 193 L735 193" stroke="#334155" stroke-width="3" marker-end="url(#f10)"/>
+    <defs><marker id="f10" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker></defs>
+    <rect x="745" y="150" width="235" height="86" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="862" y="180" text-anchor="middle" font-size="13" class="mono">while (b.hasRemaining())</text>
+    <text x="862" y="202" text-anchor="middle" font-size="13" class="mono">canal.write(b);</text>
+    <text x="862" y="224" text-anchor="middle" font-size="12">se vacía por la tubería</text>
+    <text x="20" y="275" font-size="13">Sin flip() → se manda desde el final → no se escribe nada (o BufferUnderflowException al leer).</text>
+  </svg>
+  <div class="grid3">
+    <div class="card"><b class="t">Tamaños</b>byte/boolean 1 · short/char 2 · int/float 4 · long/double 8 · <span class="mono">writeUTF</span> = 2 + texto. Big-endian: 52 = <span class="mono">00 00 00 34</span>.</div>
+    <div class="card mal"><b class="t">Trampa del signo</b><span class="mono">getShort()</span> de <span class="mono">0xCAFE</span> sale <b>negativo</b>.<br><span class="mono">Short.toUnsignedInt(s)</span> o <span class="mono">readUnsignedShort()</span>.</div>
+    <div class="card verde"><b class="t">MapaBinario: sin canal</b><span class="mono">ByteBuffer.wrap(Files.readAllBytes(r))</span><br>Caja ya llena, lista para <span class="mono">getInt()</span>: <b>sin flip</b>.</div>
+  </div>
+  <span class="num">10</span>
+</section>
+
+<!-- 11 POI -->
+<section class="page">
+  <span class="chip">12 · EXCEL CON APACHE POI</span>
+  <h1>Libro → hoja → fila → celda (desde 0)</h1>
+  <svg viewBox="0 0 1000 230">
+    <rect x="20" y="20" width="230" height="190" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="2"/><text x="135" y="55" text-anchor="middle" font-size="16" font-weight="700">XSSFWorkbook</text><text x="135" y="80" text-anchor="middle" font-size="13">el libro (.xlsx)</text>
+    <rect x="270" y="20" width="230" height="190" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="385" y="55" text-anchor="middle" font-size="16" font-weight="700">Sheet</text><text x="385" y="80" text-anchor="middle" font-size="13">createSheet("Inventario")</text>
+    <rect x="520" y="20" width="230" height="190" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/><text x="635" y="55" text-anchor="middle" font-size="16" font-weight="700">Row</text><text x="635" y="80" text-anchor="middle" font-size="13">createRow(0) = fila 1</text>
+    <rect x="770" y="20" width="210" height="190" rx="12" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="875" y="55" text-anchor="middle" font-size="16" font-weight="700">Cell</text><text x="875" y="80" text-anchor="middle" font-size="13">createCell(0) = columna A</text>
+    <g font-size="13"><text x="875" y="120" text-anchor="middle">setCellValue("SSD")</text><text x="875" y="145" text-anchor="middle">setCellValue(89.90)</text><text x="875" y="170" text-anchor="middle">setCellFormula("B2*C2")</text><text x="875" y="195" text-anchor="middle" style="fill:#dc2626">sin el «=»</text></g>
+    <g font-size="13"><text x="135" y="130" text-anchor="middle">librería EXTERNA</text><text x="135" y="152" text-anchor="middle" class="mono">poi-ooxml</text><text x="135" y="180" text-anchor="middle">libro.write(out)</text></g>
+    <g font-size="13"><text x="385" y="130" text-anchor="middle">autoSizeColumn(0)</text></g>
+    <g font-size="13"><text x="635" y="130" text-anchor="middle">CellStyle + Font</text><text x="635" y="152" text-anchor="middle">setBold(true)</text></g>
+  </svg>
+  <div class="grid2">
+    <div class="card amar"><b class="t">Reglas</b>• Sin la dependencia, las clases salen en rojo.<br>• Números como número (no texto) para que Excel opere.<br>• El estilo se crea aparte y se aplica a la celda.<br>• Se guarda con el ciclo abrir → escribir → cerrar (<span class="mono">try ( )</span>).</div>
+    <table class="small">
+      <tr><th>Resumen del tema</th><th>Frase</th></tr>
+      <tr><td>Ruta</td><td>dirección, no casa</td></tr>
+      <tr><td>Cerrar</td><td>try ( ): el búfer llega al disco</td></tr>
+      <tr><td>Opciones</td><td>machaca · se niega · añade</td></tr>
+      <tr><td>Seguridad</td><td>normalize + Path.startsWith</td></tr>
+      <tr><td>Binario</td><td>mismo orden · EOFException</td></tr>
+      <tr><td>Serializar</td><td>Serializable · UID · transient</td></tr>
+      <tr><td>Aleatorio</td><td>n × tamaño fijo</td></tr>
+      <tr><td>ByteBuffer</td><td>llenar → flip → vaciar</td></tr>
+    </table>
+  </div>
+  <span class="num">11</span>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="hibernate.orm.core" type="repository">
+    <properties maven-id="org.hibernate.orm:hibernate-core:7.0.2.Final" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/hibernate-core-7.0.2.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jakarta.persistence-api-3.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jakarta.transaction-api-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jboss-logging-3.6.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/hibernate-models-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/classmate-1.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/byte-buddy-1.15.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jakarta.xml.bind-api-4.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jakarta.activation-api-2.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jaxb-runtime-4.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jaxb-core-4.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/angus-activation-2.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/txw2-4.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/istack-commons-runtime-4.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/jakarta.inject-api-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/zz_otros/lib/antlr4-runtime-4.13.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

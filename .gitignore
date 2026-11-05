@@ -15,3 +15,11 @@ ejercicios/tareas_semanales/*/salida/
 
 # ZIPs de entrega (se generan aparte)
 *.zip
+
+# datos locales con contraseñas (el repo es público)
+ejercicios/src/META-INF/persistence.xml
+ejercicios/src/tema7_api_rest/src/main/resources/application.properties
+
+# otros: entregas ya presentadas y JAR que se pueden descargar
+zz_otros/entregas/
+zz_otros/lib/
