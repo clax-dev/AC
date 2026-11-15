@@ -1,6 +1,5 @@
-package com.example.cliente.repository;
+package com.example.cliente.repositories;
 
-import com.example.cliente.dto.ClienteResponseDTO;
 import com.example.cliente.entity.Cliente;
 import com.example.cliente.entity.TipoCliente;
 import org.springframework.data.jpa.repository.JpaRepository;

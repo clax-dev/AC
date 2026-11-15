@@ -9,8 +9,8 @@ import com.example.cliente.entity.Pedido;
 import com.example.cliente.entity.TipoCliente;
 import com.example.cliente.mapper.ClienteMapper;
 import com.example.cliente.mapper.PedidoMapper;
-import com.example.cliente.repository.ClienteRepository;
-import com.example.cliente.repository.PedidoRepository;
+import com.example.cliente.repositories.ClienteRepository;
+import com.example.cliente.repositories.PedidoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
