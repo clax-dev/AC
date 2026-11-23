@@ -1,0 +1,7 @@
+# TIPO_REGISTRO;CODIGO;FECHA_ALTA;ACTIVO;NOMBRE;APELLIDOS;DNI;RAZON_SOCIAL;CIF;EMAIL;TELEFONO;SECTOR
+PERSONA;CLI-001;2023-01-15;true;Carlos;Gómez Pérez;12345678A;;;carlos.gomez@email.com;600112233;
+PERSONA;CLI-002;2023-03-20;true;Lucía;Martín Sanz;87654321B;;;;611223344;
+EMPRESA;CLI-003;2022-11-10;true;;;;Tecnologías Avanzadas SL;B12345678;contacto@tecnologias.es;912345678;Tecnología
+EMPRESA;CLI-004;2024-02-05;true;;;;Logística Global S.A.;A87654321;info@logisticaglobal.com;933445566;Transporte
+PERSONA;CLI-005;2024-01-10;false;Paola;Sánchez Ruiz;45678912C;;;paola.sanchez@email.com;;
+EMPRESA;CLI-006;2024-04-12;true;;;;Comercial Ibérica de Suministros S.L.;B98765432;ventas@cis-iberica.es;944556677;Distribución
