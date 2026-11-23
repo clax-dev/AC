@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S&S Ibérica · Cartera de clientes</title>
+<style>
+  :root { --verde:#1f4d3a; --claro:#e8f3ec; --borde:#cfe3d6; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, Segoe UI, sans-serif; background:#f6f8f7; color:#1b2a22; }
+  header { background:var(--verde); color:#fff; padding:16px 24px; }
+  header h1 { margin:0; font-size:20px; }
+  header p { margin:4px 0 0; opacity:.8; font-size:13px; }
+  main { max-width:1000px; margin:0 auto; padding:20px 16px; }
+  .login { display:flex; gap:8px; flex-wrap:wrap; align-items:center; background:#fff; border:1px solid var(--borde); border-radius:10px; padding:12px; }
+  input { padding:8px; border:1px solid var(--borde); border-radius:6px; }
+  button { padding:8px 14px; border:0; border-radius:6px; background:var(--verde); color:#fff; cursor:pointer; }
+  .estado { margin:12px 0; font-size:14px; }
+  .error { color:#a12a2a; }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width:700px){ .grid { grid-template-columns:1fr; } }
+  section { background:#fff; border:1px solid var(--borde); border-radius:10px; padding:12px; }
+  h2 { font-size:16px; margin:0 0 8px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:6px; border-bottom:1px solid #edf2ef; }
+  tbody tr { cursor:pointer; }
+  tbody tr:hover, tr.sel { background:var(--claro); }
+  .tag { font-size:12px; padding:2px 6px; border-radius:4px; background:var(--claro); }
+</style>
+</head>
+<body>
+<header>
+  <h1>S&amp;S Ibérica · Cartera de clientes</h1>
+  <p>MVP conectado al API REST (datos migrados desde los ficheros legacy)</p>
+</header>
+<main>
+  <form class="login" id="login">
+    <input id="usuario" placeholder="Usuario" autocomplete="username" required>
+    <input id="clave" type="password" placeholder="Contraseña" autocomplete="current-password" required>
+    <button>Entrar</button>
+  </form>
+  <div class="estado" id="estado">Introduce un usuario (admin, comercial, ana, luis).</div>
+  <div class="grid">
+    <section>
+      <h2>Clientes</h2>
+      <table><thead><tr><th>Código</th><th>Tipo</th><th>Alta</th><th>Activo</th></tr></thead>
+        <tbody id="clientes"></tbody></table>
+    </section>
+    <section>
+      <h2 id="tituloPedidos">Pedidos</h2>
+      <table><thead><tr><th>Id</th><th>Fecha</th><th>Total (€)</th></tr></thead>
+        <tbody id="pedidos"></tbody></table>
+    </section>
+  </div>
+</main>
+<script>
+  let auth = null;
+  const estado = document.getElementById('estado');
+
+  async function api(ruta) {
+    const r = await fetch(ruta, { headers: { 'Authorization': auth } });
+    if (r.status === 401) throw new Error('401 Unauthorized: usuario o contraseña incorrectos');
+    if (r.status === 403) throw new Error('403 Forbidden: tu rol no tiene permiso');
+    if (!r.ok) throw new Error('Error ' + r.status);
+    return r.json();
+  }
+
+  function fila(celdas) {
+    const tr = document.createElement('tr');
+    celdas.forEach(c => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
+    return tr;
+  }
+
+  async function cargarPedidos(cliente, tr) {
+    document.querySelectorAll('#clientes tr').forEach(x => x.classList.remove('sel'));
+    tr.classList.add('sel');
+    document.getElementById('tituloPedidos').textContent = 'Pedidos de ' + cliente.codigo;
+    const cuerpo = document.getElementById('pedidos');
+    cuerpo.innerHTML = '';
+    try {
+      const pedidos = await api('/api/clientes/' + cliente.id + '/pedidos');
+      pedidos.forEach(p => cuerpo.appendChild(fila([p.id, p.fecha, p.total])));
+      if (!pedidos.length) cuerpo.appendChild(fila(['Sin pedidos', '', '']));
+    } catch (e) { estado.textContent = e.message; estado.className = 'estado error'; }
+  }
+
+  document.getElementById('login').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const u = document.getElementById('usuario').value;
+    auth = 'Basic ' + btoa(u + ':' + document.getElementById('clave').value);
+    const cuerpo = document.getElementById('clientes');
+    cuerpo.innerHTML = '';
+    document.getElementById('pedidos').innerHTML = '';
+    try {
+      const clientes = await api('/api/clientes');
+      clientes.forEach(c => {
+        const tr = fila([c.codigo, c.tipo, c.fechaAlta, c.activo ? 'Sí' : 'No']);
+        tr.addEventListener('click', () => cargarPedidos(c, tr));
+        cuerpo.appendChild(tr);
+      });
+      estado.textContent = '200 OK · ' + u + ' ve ' + clientes.length + ' clientes. Pulsa uno para ver sus pedidos.';
+      estado.className = 'estado';
+    } catch (e) { estado.textContent = e.message; estado.className = 'estado error'; }
+  });
+</script>
+</body>
+</html>
