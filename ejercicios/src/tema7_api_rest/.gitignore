@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### password files ###
+secrets/
+*.p12
+### Certificado TLS local (se regenera con keytool, ver LEEME) ###
+src/main/resources/keystore/
+*.p12
+*.jks

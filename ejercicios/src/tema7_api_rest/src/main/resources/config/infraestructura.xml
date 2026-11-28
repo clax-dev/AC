@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- datos de infraestructura -->
+<infraestructura>
+    <aplicacion>
+        <nombre>clientes-api</nombre>                                    <!-- ✏️ antes: spring.application.name -->
+    </aplicacion>
+
+    <servidor>
+        <puerto>8443</puerto>                                            <!-- ✏️ antes: 8080 (HTTP) -->
+        <ssl>
+            <enabled>true</enabled>
+            <key-store>classpath:keystore/localhost.p12</key-store>
+            <key-store-passwordFile>secrets/ssl_keystore_password.txt</key-store-passwordFile>
+            <key-store-type>PKCS12</key-store-type>
+            <key-alias>springboot</key-alias>
+            <protocol>TLS</protocol>
+        </ssl>
+    </servidor>
+
+    <baseDatos>
+        <motor>POSTGRESQL</motor>                                        <!-- antes: driver-class-name -->
+        <host>localhost</host>                                           <!-- ┐                       -->
+        <puerto>5432</puerto>                                            <!-- ├ antes: datasource.url -->
+        <nombre>basededatos</nombre>                                     <!-- ┘                       -->
+        <usuario>postgres</usuario>                                      <!-- ✏️ antes: username -->
+        <passwordFile>secrets/db_password.txt</passwordFile>             <!-- 🔒 la contraseña NO va aquí -->
+        <ssl>false</ssl>
+    </baseDatos>
+
+    <jpa>
+        <ddl-auto>validate</ddl-auto>
+        <show-sql>true</show-sql>
+        <format-sql>true</format-sql>
+        <open-in-view>false</open-in-view>
+    </jpa>
+</infraestructura>

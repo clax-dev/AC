@@ -23,3 +23,10 @@ ejercicios/src/tema7_api_rest/src/main/resources/application.properties
 # otros: entregas ya presentadas y JAR que se pueden descargar
 zz_otros/entregas/
 zz_otros/lib/
+
+# configuración local de la app de Postman (id del workspace, no aporta al repo)
+.postman/
+postman/
+
+# material del profesor (PDF de teoría): no se redistribuye en un repo público
+ejercicios/src/tema7_api_rest/apuntes/*.pdf

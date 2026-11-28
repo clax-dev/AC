@@ -1,0 +1,34 @@
+* Host localhost:8443 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:8443...
+* Connected to localhost (::1) port 8443
+* schannel: disabled automatic use of client certificate
+* using HTTP/1.x
+> GET /api/clientes HTTP/1.1
+> Host: localhost:8443
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+* schannel: remote party requests renegotiation
+* schannel: renegotiating SSL/TLS connection
+* schannel: SSL/TLS connection renegotiated
+< HTTP/1.1 401 
+< WWW-Authenticate: Basic realm="Realm", charset="UTF-8"
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 0
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+< X-Frame-Options: DENY
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Fri, 27 Nov 2026 11:27:20 GMT
+< 
+{ [130 bytes data]
+100   124    0   124    0     0    528      0 --:--:-- --:--:-- --:--:--   529{"timestamp":"2026-11-27T11:27:20.157Z","status":401,"error":"Unauthorized","message":"Unauthorized","path":"/api/clientes"}
+* Connection #0 to host localhost left intact

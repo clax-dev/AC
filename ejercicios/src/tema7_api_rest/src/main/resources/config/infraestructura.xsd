@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- regla de infraestructura -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="infraestructura">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="aplicacion">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="nombre" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="servidor">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="puerto" type="xs:positiveInteger"/>
+                            <xs:element name="ssl">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="enabled" type="xs:boolean"/>
+                                        <xs:element name="key-store" type="xs:string"/>
+                                        <xs:element name="key-store-passwordFile" type="xs:string"/>
+                                        <xs:element name="key-store-type" type="xs:string"/>
+                                        <xs:element name="key-alias" type="xs:string"/>
+                                        <xs:element name="protocol" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="baseDatos">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="motor">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="POSTGRESQL"/>
+                                        <xs:enumeration value="MYSQL"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="host" type="xs:string"/>
+                            <xs:element name="puerto" type="xs:positiveInteger"/>
+                            <xs:element name="nombre" type="xs:string"/>
+                            <xs:element name="usuario" type="xs:string"/>
+                            <xs:element name="passwordFile" type="xs:string"/>
+                            <xs:element name="ssl" type="xs:boolean"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="jpa">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="ddl-auto" type="xs:string"/>
+                            <xs:element name="show-sql" type="xs:boolean"/>
+                            <xs:element name="format-sql" type="xs:boolean"/>
+                            <xs:element name="open-in-view" type="xs:boolean"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
