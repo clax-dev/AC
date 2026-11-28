@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### password files ###
+secrets/
+*.p12

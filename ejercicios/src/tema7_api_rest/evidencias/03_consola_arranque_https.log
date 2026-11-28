@@ -1,0 +1,52 @@
+﻿Directorio actual: C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest
+Ruta del secreto: C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest\secrets\ssl_keystore_password.txt
+Directorio actual: C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest
+Ruta del secreto: C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest\secrets\db_password.txt
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-27T12:27:10.018+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.example.cliente.ClienteApplication   : Starting ClienteApplication using Java 25 with PID 18240 (C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest\target\classes started by guiil in C:\DAM\Segundo\AC\ejercicios\src\tema7_api_rest)
+2026-11-27T12:27:10.022+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.example.cliente.ClienteApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-11-27T12:27:10.077+01:00  INFO 18240 --- [clientes-api] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-11-27T12:27:10.077+01:00  INFO 18240 --- [clientes-api] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-11-27T12:27:10.774+01:00  INFO 18240 --- [clientes-api] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-27T12:27:10.857+01:00  INFO 18240 --- [clientes-api] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 6 JPA repository interfaces.
+2026-11-27T12:27:11.554+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8443 (https)
+2026-11-27T12:27:11.572+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-27T12:27:11.573+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.27]
+2026-11-27T12:27:11.619+01:00  INFO 18240 --- [clientes-api] [  restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1541 ms
+2026-11-27T12:27:11.788+01:00  INFO 18240 --- [clientes-api] [  restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-27T12:27:11.836+01:00  INFO 18240 --- [clientes-api] [  restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.13.Final
+2026-11-27T12:27:12.291+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-27T12:27:12.323+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-27T12:27:12.533+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@628bc8e9
+2026-11-27T12:27:12.534+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-27T12:27:12.603+01:00  INFO 18240 --- [clientes-api] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/basededatos?ssl=false]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: basededatos/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-27T12:27:13.702+01:00  INFO 18240 --- [clientes-api] [  restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-27T12:27:13.775+01:00  INFO 18240 --- [clientes-api] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-27T12:27:13.852+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-27T12:27:14.234+01:00  INFO 18240 --- [clientes-api] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name usuarioDetailsService
+2026-11-27T12:27:14.818+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8443], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [springboot] with trust store [null]
+2026-11-27T12:27:14.838+01:00  INFO 18240 --- [clientes-api] [  restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8443 (https) with context path '/'
+2026-11-27T12:27:14.844+01:00  INFO 18240 --- [clientes-api] [  restartedMain] com.example.cliente.ClienteApplication   : Started ClienteApplication in 5.413 seconds (process running for 5.877)
+2026-11-27T12:27:20.100+01:00  INFO 18240 --- [clientes-api] [nio-8443-exec-6] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-27T12:27:20.100+01:00  INFO 18240 --- [clientes-api] [nio-8443-exec-6] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-27T12:27:20.101+01:00  INFO 18240 --- [clientes-api] [nio-8443-exec-6] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
